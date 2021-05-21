@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Service
 public class CityServiceImpl implements CityService {
-    @Autowired
+    @Autowired(required = false)
     private CityMapper cityMapper;
 
     @Override

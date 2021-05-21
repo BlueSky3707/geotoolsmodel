@@ -8,6 +8,7 @@ import com.geotools.gistools.service.SpatialDataQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.rmi.RemoteException;
 
 /**
@@ -18,7 +19,7 @@ import java.rmi.RemoteException;
  */
 @Service
 public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
-    @Autowired
+   @Resource
     private PostGisSearch postGisSearch;
     @Override
     public Features search(QueryParameter queryParameter) throws RemoteException, ExceptionMsg {

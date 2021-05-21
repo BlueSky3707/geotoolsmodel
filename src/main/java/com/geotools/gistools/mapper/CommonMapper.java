@@ -7,4 +7,5 @@ package com.geotools.gistools.mapper;
  * @Date: 2021/5/20 15:10
  */
 public interface CommonMapper {
+
 }

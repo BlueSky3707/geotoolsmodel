@@ -6,6 +6,7 @@ import com.geotools.gistools.request.QueryParameter;
 import com.geotools.gistools.respose.Features;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,7 +21,7 @@ import javax.annotation.Resource;
 public class PostGisSearch {
     private static final Logger logger = LoggerFactory.getLogger(PostGisSearch.class);
     private static final double distance = 50;
-    @Resource
+    @Autowired(required = false)
     CommonMapper commonMapper;
     public Features search(QueryParameter queryParameter){
         return null;
