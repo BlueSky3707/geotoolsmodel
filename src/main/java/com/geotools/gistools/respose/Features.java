@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 功能描述：
  *
  * @Author: ddw
  * @Date: 2021/5/12 10:06
  */
+@JsonIgnoreProperties(value={"transportOrders"})  
 public class Features implements Serializable {
     /**
      * 图层名称
@@ -78,5 +81,10 @@ public class Features implements Serializable {
     public void setFields(List<Field> fields) {
         this.fields = fields;
     }
+	@Override
+	public String toString() {
+		return "Features [layerName=" + layerName + ", features=" + features + ", fields=" + fields + ", allCount="
+				+ allCount + ", maxRecordCount=" + maxRecordCount + ", isMax=" + isMax + "]";
+	}
 
 }

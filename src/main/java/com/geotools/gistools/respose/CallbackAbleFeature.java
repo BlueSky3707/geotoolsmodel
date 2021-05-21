@@ -1,5 +1,6 @@
 package com.geotools.gistools.respose;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vividsolutions.jts.geom.Geometry;
 
 
@@ -13,6 +14,7 @@ import java.util.Map;
  * @Author: ddw
  * @Date: 2021/5/11 16:37
  */
+
 public class CallbackAbleFeature implements Serializable {
     //记录一个要素的属性
     private Map<String,Object> attributes = new LinkedHashMap<String, Object>();

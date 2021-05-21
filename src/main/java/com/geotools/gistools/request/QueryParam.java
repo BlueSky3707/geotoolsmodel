@@ -4,14 +4,15 @@ import com.geotools.gistools.exception.ExceptionMsg;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 功能描述：
  *
- * @Author: ddw
- * @Date: 2021/5/12 10:11
+ * @Author: jdy
+ * @Date: 2021/5/17 15:11
  */
-public class QueryParameter extends  ValidParameter {
+public class QueryParam extends  ValidParameter {
     /**
      * 图层名称
      */
@@ -19,11 +20,11 @@ public class QueryParameter extends  ValidParameter {
     /**
      * 属性过滤条件
      */
-    protected String filter;
+    protected String where;
     /**
      * 空间过滤条件
      */
-    protected String spatialFilter;
+    protected Map geometry;
     /**
      * 返回的字段名
      */
@@ -39,20 +40,23 @@ public class QueryParameter extends  ValidParameter {
     /**
      * 空间位置关系
      */
-    protected String spatialRel;
-
+    protected SpatialRel spatialRel = SpatialRel.INTERSECTS;
+    /**
+     * 空间位置wkt
+     */
+    protected String geomwkt;
     /**
      * 分页信息
      */
     protected Integer current ;
 
     protected Integer limit ;
-    public QueryParameter(){}
+    public QueryParam(){}
 
-    public QueryParameter(String layerName, String filter, String spatialFilter, String outFields, Boolean isReturnGeometry, String orderByFields, String spatialRel, Integer current, Integer limit) {
+    public QueryParam(String layerName, String where, Map geometry, String outFields, Boolean isReturnGeometry, String orderByFields, SpatialRel spatialRel, Integer current, Integer limit) {
         this.layerName = layerName;
-        this.filter = filter;
-        this.spatialFilter = spatialFilter;
+        this.where = where;
+        this.geometry = geometry;
         this.outFields = outFields;
         this.isReturnGeometry = isReturnGeometry;
         this.orderByFields = orderByFields;
@@ -74,22 +78,7 @@ public class QueryParameter extends  ValidParameter {
         this.layerName = layerName;
     }
 
-    public String getFilter() {
-        return filter;
-    }
-
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
-
-    public String getSpatialFilter() {
-        return spatialFilter;
-    }
-
-    public void setSpatialFilter(String spatialFilter) {
-        this.spatialFilter = spatialFilter;
-    }
-
+    
     public String getOutFields() {
         return outFields;
     }
@@ -114,11 +103,11 @@ public class QueryParameter extends  ValidParameter {
         this.orderByFields = orderByFields;
     }
 
-    public String getSpatialRel() {
+    public SpatialRel getSpatialRel() {
         return spatialRel;
     }
 
-    public void setSpatialRel(String spatialRel) {
+    public void setSpatialRel(SpatialRel spatialRel) {
         this.spatialRel = spatialRel;
     }
 
@@ -137,4 +126,29 @@ public class QueryParameter extends  ValidParameter {
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
+
+	public String getWhere() {
+		return where;
+	}
+
+	public void setWhere(String where) {
+		this.where = where;
+	}
+
+	public Map getGeometry() {
+		return geometry;
+	}
+
+	public void setGeometry(Map geometry) {
+		this.geometry = geometry;
+	}
+
+	public String getGeomwkt() {
+		return geomwkt;
+	}
+
+	public void setGeomwkt(String geomwkt) {
+		this.geomwkt = geomwkt;
+	}
+    
 }

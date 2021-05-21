@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.geotools.gistools.mapper.CommonMapper">
-
+	<!-- 查询 -->	
+  <select id="search" parameterType="com.geotools.gistools.request.QueryParameter"  resultType="java.util.Map">
+    select 
+    <if test="isReturnGeometry=true">
+   		 st_astext(geom) as geom,
+    </if>
+    <if test="outFields != null and outFields != ''">
+        ${outFields} 
+    </if>
+    from ${layerName} 
+    where 1=1
+    <if test="filter != null">
+			and	( ${filter} )
+	</if>
+	<if test="spatialRel=='DISJOINT' and spatialFilter!=null">
+			and	ST_Disjoint(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="spatialRel=='INTERSECTS' and spatialFilter!=null">
+			and	ST_Intersects(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="spatialRel=='TOUCHES' and spatialFilter!=null">
+			and	ST_Touches(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="spatialRel=='CROSSES' and spatialFilter!=null">
+			and	ST_Crosses(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="spatialRel=='WITHIN' and spatialFilter!=null">
+			and	ST_Within(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="spatialRel=='CONTAINS' and spatialFilter!=null">
+			and	ST_Contains(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="spatialRel=='OVERLAPS' and spatialFilter!=null">
+			and	ST_Overlaps(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+	</if>
+	<if test="orderByFields != null and orderByFields != ''">
+			 ${orderByFields}
+	</if>
+	<if test="current != null and limit != null">
+			 limit ${limit} OFFSET ${current}
+	</if>
+  </select>
+  	<!-- 查询 -->	
+  <select id="getColumns" parameterType="String"  resultType="java.util.Map">
+ 	 SELECT COLUMN_NAME,data_type FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME=${tablename}  
+  </select>
 </mapper>
