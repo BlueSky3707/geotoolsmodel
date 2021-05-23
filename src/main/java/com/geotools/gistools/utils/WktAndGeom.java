@@ -197,9 +197,23 @@ public class WktAndGeom {
     	 try {
     		 switch (type) {
 			case "POINT":
-				
+				geometry=createPointByWKT(wkt);
 				break;
-
+			case "MULTIPOINT":
+				geometry=createMulPointByWKT(wkt);
+				break;
+			case "LINESTRING":
+				geometry=createLineByWKT(wkt);
+				break;
+			case "MULTILINESTRING":
+				geometry=createMLineByWKT(wkt);
+				break;
+			case "POLYGON":
+				geometry=createPolygonByWKT(wkt);
+				break;
+			case "MULTIPOLYGON":
+				geometry=createMulPolygonByWKT(wkt);
+				break;
 			default:
 				break;
 			}

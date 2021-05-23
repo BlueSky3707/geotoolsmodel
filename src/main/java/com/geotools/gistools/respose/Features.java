@@ -22,11 +22,11 @@ public class Features implements Serializable {
     /**
      * 返回记录
      */
-    private List<CallbackAbleFeature> features=new ArrayList();
+    private List<CallbackAbleFeature> features=new ArrayList<CallbackAbleFeature>();
     /**
      * 图层字段列表
      */
-    private List<Field> fields=new ArrayList();
+    private List<Field> fields=new ArrayList<Field>();
     /**
      * 本次查询的总记录条数
      */

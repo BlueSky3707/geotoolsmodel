@@ -57,12 +57,12 @@ public class SpatialDataQueryController {
                             @RequestParam(value = "spatialRel", required = false) String spatialRel,
                             @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
                             @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws RemoteException, ExceptionMsg {
-        logger.info("空间数据属性查询调用接口开始=======图层名称:{},属性过滤条件:{},空间过滤条件:{},返回的字段:{},是否返回空间数据:{},排序条件:{},空间位置关系:{},页码:{},每页记录数:{}", layerName, filter, spatialFilter, outFields, isReturnGeometry, orderByFields, spatialRel, current, limit);
+//        logger.info("空间数据属性查询调用接口开始=======图层名称:{},属性过滤条件:{},空间过滤条件:{},返回的字段:{},是否返回空间数据:{},排序条件:{},空间位置关系:{},页码:{},每页记录数:{}", layerName, filter, spatialFilter, outFields, isReturnGeometry, orderByFields, spatialRel, current, limit);
         ApiResult apiData=new ApiResult();
         QueryParameter param=new QueryParameter(layerName,filter,spatialFilter,outFields,isReturnGeometry,orderByFields,spatialRel,current,limit);
       
         Features pFeartrues= spatialDataQueryService.search(param);
-        System.out.println(pFeartrues.toString());
+        
         apiData.setData(pFeartrues);
         return apiData;
     }

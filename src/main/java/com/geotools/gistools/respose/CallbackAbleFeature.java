@@ -1,6 +1,6 @@
 package com.geotools.gistools.respose;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 
@@ -57,9 +57,14 @@ public class CallbackAbleFeature implements Serializable {
         return geometryType;
     }
 
-
+//    @JsonIgnore
     public Geometry getGeometry() {
         return geometry;
     }
+	@Override
+	public String toString() {
+		return "CallbackAbleFeature [attributes=" + attributes + ", geometry=" + geometry + ", geometryType="
+				+ geometryType + "]";
+	}
 
 }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,33 +36,38 @@ public class PostGisSearch {
     
     @Autowired(required=false)
     CommonMapper commonMapper;
-    @Autowired(required=false)
-    CityptDao cityptDao;
+   
     public Features search(QueryParameter queryParameter){
     	Features featuresSet = new Features();
     	List<Map<String, Object>> lists = commonMapper.search(queryParameter);
     	List<CallbackAbleFeature> features=new ArrayList<CallbackAbleFeature>();
-    	try {
+    	String outFields = queryParameter.getOutFields();
+    	String[] atrs = outFields.split(",");
+//    	try {
     	for (Map<String, Object> map : lists) {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		if(queryParameter.isReturnGeometry()) {
     			String wkt = map.get("geom").toString();
-    			WktAndGeom gt = new WktAndGeom();
-//    			Geometry geom = gt.createGeometryByWKT(wkt);
-    			WKTReader reader = new WKTReader();
-    			Geometry geom = reader.read(wkt);
+//    			WKTReader reader = new WKTReader();
+//    			Geometry geom = reader.read(wkt);
+    			WktAndGeom wktAndGeom = new WktAndGeom();
+    			Geometry geom =wktAndGeom.createGeometryByWKT(wkt);
 				callbackAbleFeature.setGeometry(geom);
 				
     			
     		}
-    			
-    		callbackAbleFeature.setAttributes(map);
+    		HashMap<String, Object> hashMap = new HashMap<String, Object>();
+    		for (String atr : atrs) {
+    			hashMap.put(atr, map.get("atr"));
+			}
+    		callbackAbleFeature.setAttributes(hashMap);
     		features.add(callbackAbleFeature);
+    		
 		}
-    	} catch (ParseException e) {
-			
-			e.printStackTrace();
-		}
+//    	} catch (ParseException e) {
+//			
+//			e.printStackTrace();
+//		}
 //    	String outFields = queryParameter.getOutFields();
     	featuresSet.setAllCount(lists.size());
     	featuresSet.setLayerName(queryParameter.getLayerName());
