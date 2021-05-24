@@ -44,17 +44,17 @@ public class PostGisSearch {
     	List<CallbackAbleFeature> features=new ArrayList<CallbackAbleFeature>();
     	String outFields = queryParameter.getOutFields();
     	String[] atrs = outFields.split(",");
-//    	try {
+    	try {
     	for (Map<String, Object> map : lists) {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		if(queryParameter.isReturnGeometry()) {
     			String wkt = map.get("geom").toString();
-//    			WKTReader reader = new WKTReader();
-//    			Geometry geom = reader.read(wkt);
-    			WktAndGeom wktAndGeom = new WktAndGeom();
-    			Geometry geom =wktAndGeom.createGeometryByWKT(wkt);
-    			Map geo = JSON.parseObject(JSON.toJSONString(geom), Map.class);
-				callbackAbleFeature.setGeometry(geo);
+    			WKTReader reader = new WKTReader();
+    			Geometry geom = reader.read(wkt);
+//    			WktAndGeom wktAndGeom = new WktAndGeom();
+//    			Geometry geom =wktAndGeom.createGeometryByWKT(wkt);
+//    			Map geo = JSON.parseObject(JSON.toJSONString(geom), Map.class);
+				callbackAbleFeature.setGeometry(geom);
 				
     			
     		}
@@ -66,10 +66,10 @@ public class PostGisSearch {
     		features.add(callbackAbleFeature);
     		
 		}
-//    	} catch (ParseException e) {
-//			
-//			e.printStackTrace();
-//		}
+    	} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
 //    	String outFields = queryParameter.getOutFields();
     	featuresSet.setAllCount(lists.size());
     	featuresSet.setLayerName(queryParameter.getLayerName());

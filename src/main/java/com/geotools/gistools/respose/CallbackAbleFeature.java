@@ -19,7 +19,7 @@ public class CallbackAbleFeature implements Serializable {
     //记录一个要素的属性
     private Map<String,Object> attributes = new LinkedHashMap<String, Object>();
     //几何体
-    private Map<String, Object> geometry = null;
+    private Geometry geometry = null;
     /** 几何类型. */
     private String geometryType = null;
     public Map<String, Object> getAttributes() {
@@ -31,10 +31,10 @@ public class CallbackAbleFeature implements Serializable {
     public void setAttribute(String name,Object value){
         this.attributes.put(name, value);
     }
-    public void setGeometry(Map<String, Object> geometry) {
-//        if(geometry!=null&&geometryType==null){
-//            this.geometryType=geometry.getGeometryType();
-//        }
+    public void setGeometry(Geometry geometry) {
+        if(geometry!=null&&geometryType==null){
+            this.geometryType=geometry.getGeometryType();
+        }
         this.geometry=geometry;
     }
 
@@ -58,7 +58,7 @@ public class CallbackAbleFeature implements Serializable {
     }
 
 //    @JsonIgnore
-    public Map<String, Object> getGeometry() {
+    public Geometry getGeometry() {
         return geometry;
     }
 	@Override
