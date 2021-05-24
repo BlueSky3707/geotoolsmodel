@@ -55,6 +55,9 @@ public class PostGisSearch {
 //    			Geometry geom =wktAndGeom.createGeometryByWKT(wkt);
 //    			Map geo = JSON.parseObject(JSON.toJSONString(geom), Map.class);
 				callbackAbleFeature.setGeometry(geom);
+			System.out.println(callbackAbleFeature.getGeometry());
+			System.out.println(callbackAbleFeature.getGeometry().getGeometryType());
+				
 				
     			
     		}
