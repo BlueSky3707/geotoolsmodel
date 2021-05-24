@@ -1,8 +1,5 @@
 package com.geotools.gistools.respose;
-
 import com.vividsolutions.jts.geom.Geometry;
-
-
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
