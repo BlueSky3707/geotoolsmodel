@@ -1,6 +1,7 @@
 package com.geotools.gistools.postgis;
 
 
+import com.alibaba.fastjson.JSON;
 import com.geotools.gistools.mapper.CityptDao;
 import com.geotools.gistools.mapper.CommonMapper;
 import com.geotools.gistools.request.QueryParameter;
@@ -52,7 +53,8 @@ public class PostGisSearch {
 //    			Geometry geom = reader.read(wkt);
     			WktAndGeom wktAndGeom = new WktAndGeom();
     			Geometry geom =wktAndGeom.createGeometryByWKT(wkt);
-				callbackAbleFeature.setGeometry(geom);
+    			Map geo = JSON.parseObject(JSON.toJSONString(geom), Map.class);
+				callbackAbleFeature.setGeometry(geo);
 				
     			
     		}
