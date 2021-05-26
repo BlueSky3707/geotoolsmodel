@@ -1,7 +1,4 @@
 package com.geotools.gistools.postgis;
-
-
-import com.alibaba.fastjson.JSON;
 import com.geotools.gistools.mapper.CityptDao;
 import com.geotools.gistools.mapper.CommonMapper;
 import com.geotools.gistools.request.QueryParameter;
@@ -43,22 +40,13 @@ public class PostGisSearch {
     	List<CallbackAbleFeature> features=new ArrayList<CallbackAbleFeature>();
     	String outFields = queryParameter.getOutFields();
     	String[] atrs = outFields.split(",");
-    	try {
+
     	for (Map<String, Object> map : lists) {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		if(queryParameter.isReturnGeometry()) {
     			String wkt = map.get("geom").toString();
-    			WKTReader reader = new WKTReader();
-    			Geometry geom = reader.read(wkt);
-//    			WktAndGeom wktAndGeom = new WktAndGeom();
-//    			Geometry geom =wktAndGeom.createGeometryByWKT(wkt);
-//    			Map geo = JSON.parseObject(JSON.toJSONString(geom), Map.class);
-				callbackAbleFeature.setGeometry(geom);
-			System.out.println(callbackAbleFeature.getGeometry());
-			System.out.println(callbackAbleFeature.getGeometry().getGeometryType());
-				
-				
-    			
+				callbackAbleFeature.setWktGeo(wkt);
+
     		}
     		HashMap<String, Object> hashMap = new HashMap<String, Object>();
     		for (String atr : atrs) {
@@ -68,10 +56,7 @@ public class PostGisSearch {
     		features.add(callbackAbleFeature);
     		
 		}
-    	} catch (ParseException e) {
-			
-			e.printStackTrace();
-		}
+
 //    	String outFields = queryParameter.getOutFields();
     	featuresSet.setAllCount(lists.size());
     	featuresSet.setLayerName(queryParameter.getLayerName());
