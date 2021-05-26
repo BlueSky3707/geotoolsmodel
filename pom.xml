@@ -10,6 +10,7 @@
     </parent>
     <groupId>com.Geotools</groupId>
     <artifactId>gistools</artifactId>
+    <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>gistools</name>
     <description>Demo project for Spring Boot</description>
@@ -18,7 +19,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <geotools.version>25-SNAPSHOT</geotools.version>
-
+		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     </properties>
 
     <repositories>
@@ -120,14 +121,18 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.vividsolutions/jts -->
+
         <!-- https://mvnrepository.com/artifact/com.vividsolutions/jts -->
         <dependency>
             <groupId>com.vividsolutions</groupId>
             <artifactId>jts</artifactId>
             <version>1.12</version>
         </dependency>
-
+<dependency>
+   <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.54</version>
+</dependency>
 
 
     </dependencies>

@@ -18,4 +18,5 @@ import com.geotools.gistools.request.QueryParameter;
 @org.apache.ibatis.annotations.Mapper
 public interface CommonMapper {
 	 List<Map<String, Object>> search(QueryParameter queryParameter);
+
 }

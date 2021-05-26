@@ -18,7 +18,8 @@ import java.util.Map;
  */
 @Service
 public class CityServiceImpl implements CityService {
-    @Autowired(required=false)
+ @Autowired(required = false)
+
     private CityMapper cityMapper;
     @Autowired(required=false)
     private CityptDao cityDao;

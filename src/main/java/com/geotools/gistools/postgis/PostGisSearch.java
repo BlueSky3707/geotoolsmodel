@@ -37,7 +37,6 @@ public class PostGisSearch {
     
     @Autowired(required=false)
     CommonMapper commonMapper;
-   
     public Features search(QueryParameter queryParameter){
     	Features featuresSet = new Features();
     	List<Map<String, Object>> lists = commonMapper.search(queryParameter);
