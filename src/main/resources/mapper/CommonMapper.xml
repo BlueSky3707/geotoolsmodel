@@ -5,14 +5,14 @@
   <select id="search" parameterType="com.geotools.gistools.request.QueryParameter"  resultType="java.util.Map">
     select 
     <if test="isReturnGeometry=true">
-   		 st_astext(geom) as geom,
+   		 st_asgeojson(geom) as geom,
     </if>
     <if test="outFields != null and outFields != ''">
         ${outFields} 
     </if>
     from ${layerName} 
     where 1=1
-    <if test="filter != null">
+    <if test="filter != null and filter != ''">
 			and	( ${filter} )
 	</if>
 	<if test="spatialRel=='DISJOINT' and spatialFilter!=null">
@@ -39,12 +39,50 @@
 	<if test="orderByFields != null and orderByFields != ''">
 			 ${orderByFields}
 	</if>
+	<if test="limit != null">
+			 limit ${limit}
+	</if>
 	<if test="current != null and limit != null">
-			 limit ${limit} OFFSET ${current}
+			  OFFSET (${current}-1)*${limit}
 	</if>
   </select>
-  	<!-- 查询 -->	
+  	<!-- 查询表字段列表 -->	
   <select id="getColumns" parameterType="String"  resultType="java.util.Map">
- 	 SELECT COLUMN_NAME,data_type FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME=${tablename}  
+ 	 SELECT COLUMN_NAME,data_type FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME=#{tablename}  
   </select>
+  <!--根据城市名或代码查询  -->
+  <select id="getDataByNameOrCode"  resultType="java.util.Map">
+ 	  select st_asgeojson(geom) as geom,
+ 	   <if test="outFields != null and outFields != ''">
+       		 ${outFields} 
+    	</if>
+ 	  
+ 	   from ${layerName}  
+ 	  where 1=1
+ 	  <if test="(cityname != null and cityname != '') or (citycode != null and citycode != '')">
+	 	and   st_intersects(geom,
+	 	  (select t.geom from ${cityLayerName} t  where  1=1 
+	 	  <if test="cityname != null and cityname != ''">
+			    and t.${cityname}
+		  </if>
+	 	   <if test="citycode != null and citycode != ''">
+				and t.${citycode }
+		  </if>
+	 	  
+	 	  ))=true
+ 	  </if>
+ 	   <if test="where != null and where != ''">
+			and ${where}
+	  </if>
+	  <if test="orderByFields != null and orderByFields != ''">
+			 ${orderByFields}
+	  </if>
+	  <if test="limit != null">
+			 limit ${limit}
+	  </if>
+	  <if test="current != null and limit != null">
+			  OFFSET (${current}-1)*${limit}
+	  </if>
+  </select>
+  
 </mapper>

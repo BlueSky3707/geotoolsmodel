@@ -40,6 +40,10 @@ public class QueryParameter extends  ValidParameter {
      * 空间位置关系
      */
     protected String spatialRel;
+    /**
+     * 缓冲距离
+     */
+    protected Integer buffDis;
 
     /**
      * 分页信息

@@ -2,6 +2,7 @@ package com.geotools.gistools.service.impl;
 
 import com.geotools.gistools.exception.ExceptionMsg;
 import com.geotools.gistools.postgis.PostGisSearch;
+import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
 import com.geotools.gistools.respose.Features;
 import com.geotools.gistools.service.SpatialDataQueryService;
@@ -32,4 +33,10 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
         Features features= postGisSearch.bufferSearch(queryParameter);
         return features;
     }
+
+	@Override
+	public Features getDataByNameOrCode(QueryParam queryParam) {
+		 Features features= postGisSearch.getDataByNameOrCode(queryParam);
+		return features;
+	}
 }

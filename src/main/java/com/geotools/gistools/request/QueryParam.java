@@ -18,33 +18,32 @@ public class QueryParam extends  ValidParameter {
      */
     protected String layerName;
     /**
+     * 城市图层名称
+     */
+    protected String cityLayerName;
+    /**
+     * 城市名
+     */
+    protected String cityname;
+    /**
+     * 城市代码
+     */
+    protected String citycode;
+    /**
      * 属性过滤条件
      */
     protected String where;
+   
     /**
-     * 空间过滤条件
-     */
-    protected Map geometry;
-    /**
-     * 返回的字段名
+     * 返回字段
      */
     protected String outFields;
+    
     /**
-     * 是否返回空间信息
-     */
-    protected boolean isReturnGeometry=true;
-    /**
-     * 排序规则 例如：ORDER BY ID DESC,NAME
+     * 排序字段
      */
     protected String orderByFields;
-    /**
-     * 空间位置关系
-     */
-    protected SpatialRel spatialRel = SpatialRel.INTERSECTS;
-    /**
-     * 空间位置wkt
-     */
-    protected String geomwkt;
+ 
     /**
      * 分页信息
      */
@@ -53,21 +52,26 @@ public class QueryParam extends  ValidParameter {
     protected Integer limit ;
     public QueryParam(){}
 
-    public QueryParam(String layerName, String where, Map geometry, String outFields, Boolean isReturnGeometry, String orderByFields, SpatialRel spatialRel, Integer current, Integer limit) {
-        this.layerName = layerName;
-        this.where = where;
-        this.geometry = geometry;
-        this.outFields = outFields;
-        this.isReturnGeometry = isReturnGeometry;
-        this.orderByFields = orderByFields;
-        this.spatialRel = spatialRel;
-        this.current = current;
-        this.limit = limit;
-    }
+   
+    public QueryParam(String layerName, String cityLayerName, String cityname, String citycode, String where,
+			String outFields, String orderByFields, Integer current, Integer limit) {
+		super();
+		this.layerName = layerName;
+		this.cityLayerName = cityLayerName;
+		this.cityname = cityname;
+		this.citycode = citycode;
+		this.where = where;
+		this.outFields = outFields;
+		this.orderByFields = orderByFields;
+		this.current = current;
+		this.limit = limit;
+	}
 
-    @Override
+
+	@Override
     public boolean check() throws ExceptionMsg {
         ValidParameter.isBlank(this.layerName, "'layerName'参数不能为空!");
+        ValidParameter.isBlank(this.cityLayerName, "'cityLayerName'参数不能为空!");
         return true;
     }
     public String getLayerName() {
@@ -87,13 +91,7 @@ public class QueryParam extends  ValidParameter {
         this.outFields = outFields;
     }
 
-    public boolean isReturnGeometry() {
-        return isReturnGeometry;
-    }
-
-    public void setReturnGeometry(boolean returnGeometry) {
-        isReturnGeometry = returnGeometry;
-    }
+   
 
     public String getOrderByFields() {
         return orderByFields;
@@ -103,14 +101,7 @@ public class QueryParam extends  ValidParameter {
         this.orderByFields = orderByFields;
     }
 
-    public SpatialRel getSpatialRel() {
-        return spatialRel;
-    }
-
-    public void setSpatialRel(SpatialRel spatialRel) {
-        this.spatialRel = spatialRel;
-    }
-
+  
     public Integer getCurrent() {
         return current;
     }
@@ -135,20 +126,36 @@ public class QueryParam extends  ValidParameter {
 		this.where = where;
 	}
 
-	public Map getGeometry() {
-		return geometry;
+
+	public String getCityLayerName() {
+		return cityLayerName;
 	}
 
-	public void setGeometry(Map geometry) {
-		this.geometry = geometry;
+
+	public void setCityLayerName(String cityLayerName) {
+		this.cityLayerName = cityLayerName;
 	}
 
-	public String getGeomwkt() {
-		return geomwkt;
+
+	public String getCityname() {
+		return cityname;
 	}
 
-	public void setGeomwkt(String geomwkt) {
-		this.geomwkt = geomwkt;
+
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
 	}
+
+
+	public String getCitycode() {
+		return citycode;
+	}
+
+
+	public void setCitycode(String citycode) {
+		this.citycode = citycode;
+	}
+
+	
     
 }

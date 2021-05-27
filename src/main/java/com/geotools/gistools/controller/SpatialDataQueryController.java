@@ -1,6 +1,7 @@
 package com.geotools.gistools.controller;
 
 import com.geotools.gistools.exception.ExceptionMsg;
+import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
 import com.geotools.gistools.respose.ApiResult;
 import com.geotools.gistools.respose.Features;
@@ -69,5 +70,36 @@ public class SpatialDataQueryController {
     @Cacheable
     public ApiResult bufferSearch(){
         return null;
+    }
+    
+    @ApiOperation(value = "空间数据属性查询按行政区")
+    @RequestMapping(value = "getDataByNameOrCode", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "layerName", required = true, dataType = "String", value = "空间数据库中的图层名称"),
+            @ApiImplicitParam(paramType = "query", name = "where", required = false, dataType = "String", value = "属性过滤条件，语法请参考SQL，例如：LXBM='G45' AND SXXFX=1"),
+            @ApiImplicitParam(paramType = "query", name = "cityLayerName", required = true, dataType = "String", value = "城市空间数据库中的图层名称"),
+            @ApiImplicitParam(paramType = "query", name = "cityname", required = false, dataType = "String", value = "城市名称过滤条件，语法请参考SQL，cityname='延安市'"),
+            @ApiImplicitParam(paramType = "query", name = "citycode", required = false, dataType = "String", value = "城市代码，语法请参考SQL，citycode='600061000'"),
+            @ApiImplicitParam(paramType = "query", name = "outFields", required = false, dataType = "String", value = "查询返回的字段,例如：LXBM,LXMC"),
+            @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
+            @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
+            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为10")})
+    @Cacheable
+    public ApiResult getDataByNameOrCode(@RequestParam(value = "layerName", required = true) String layerName,
+								            @RequestParam(value = "where", required = false) String where,
+								            @RequestParam(value = "cityLayerName", required = false) String cityLayerName,
+								            @RequestParam(value = "cityname", required = false) String cityname,
+								            @RequestParam(value = "citycode", required = false) String citycode,
+								            @RequestParam(value = "outFields", required = false) String outFields,
+								            @RequestParam(value = "orderByFields", required = false) String orderByFields,
+								            @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
+								            @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit){
+    	  ApiResult apiData=new ApiResult();
+          QueryParam param=new QueryParam( layerName,  cityLayerName,  cityname,  citycode,  where,
+      			 outFields,  orderByFields,  current,  limit);
+        
+          Features pFeartrues= spatialDataQueryService.getDataByNameOrCode(param);
+          
+          apiData.setData(pFeartrues);
+          return apiData;
     }
 }
