@@ -5,7 +5,7 @@
   <select id="search" parameterType="com.geotools.gistools.request.QueryParameter"  resultType="java.util.Map">
     select 
     <if test="isReturnGeometry=true">
-   		 st_astext(geom) as geom,
+   		 st_asgeojson(geom) as geom,
     </if>
     <if test="outFields != null and outFields != ''">
         ${outFields} 

@@ -45,12 +45,12 @@ public class PostGisSearch {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		if(queryParameter.isReturnGeometry()) {
     			String wkt = map.get("geom").toString();
-				callbackAbleFeature.setWktGeo(wkt);
+				callbackAbleFeature.setGeoJson(wkt);
 
     		}
     		HashMap<String, Object> hashMap = new HashMap<String, Object>();
     		for (String atr : atrs) {
-    			hashMap.put(atr, map.get("atr"));
+    			hashMap.put(atr, map.get(atr).toString());
 			}
     		callbackAbleFeature.setAttributes(hashMap);
     		features.add(callbackAbleFeature);
