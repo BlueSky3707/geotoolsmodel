@@ -17,5 +17,5 @@ import java.rmi.RemoteException;
 public interface SpatialDataQueryService {
     Features search(QueryParameter queryParameter) throws RemoteException, ExceptionMsg;
     Features getDataByNameOrCode(QueryParam queryParam) ;
-    Features bufferSearch(QueryParameter queryParameter) throws ExceptionMsg;
+    Features bufferSearch(QueryParameter queryParameter);
 }

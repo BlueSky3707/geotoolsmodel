@@ -20,6 +20,7 @@ import com.geotools.gistools.request.QueryParameter;
 @org.apache.ibatis.annotations.Mapper
 public interface CommonMapper {
 	 List<Map<String, Object>> search(QueryParameter queryParameter);
+	 List<Map<String, Object>> bufferSearch(QueryParameter queryParameter);
 	 List<Map<String, Object>> getColumns(@Param("tablename") String tablename);
 	 List<Map<String, Object>> getDataByNameOrCode(QueryParam queryParam);
 

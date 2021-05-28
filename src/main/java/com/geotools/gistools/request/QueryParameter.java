@@ -65,7 +65,21 @@ public class QueryParameter extends  ValidParameter {
         this.limit = limit;
     }
 
-    @Override
+    public QueryParameter(String layerName, String filter, String spatialFilter, String outFields,
+			boolean isReturnGeometry, String orderByFields, Integer buffDis, Integer current, Integer limit) {
+		super();
+		this.layerName = layerName;
+		this.filter = filter;
+		this.spatialFilter = spatialFilter;
+		this.outFields = outFields;
+		this.isReturnGeometry = isReturnGeometry;
+		this.orderByFields = orderByFields;
+		this.buffDis = buffDis;
+		this.current = current;
+		this.limit = limit;
+	}
+
+	@Override
     public boolean check() throws ExceptionMsg {
         ValidParameter.isBlank(this.layerName, "'layerName'参数不能为空!");
         return true;
@@ -141,4 +155,13 @@ public class QueryParameter extends  ValidParameter {
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
+
+	public Integer getBuffDis() {
+		return buffDis;
+	}
+
+	public void setBuffDis(Integer buffDis) {
+		this.buffDis = buffDis;
+	}
+    
 }

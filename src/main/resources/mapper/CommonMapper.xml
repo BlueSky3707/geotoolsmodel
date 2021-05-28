@@ -84,5 +84,32 @@
 			  OFFSET (${current}-1)*${limit}
 	  </if>
   </select>
-  
+  <!--缓冲分析  -->
+  <select id="bufferSearch" parameterType="com.geotools.gistools.request.QueryParameter"  resultType="java.util.Map">
+    select 
+    <if test="isReturnGeometry=true">
+   		 st_asgeojson(geom) as geom,
+    </if>
+    <if test="outFields != null and outFields != ''">
+        ${outFields} 
+    </if>
+    from ${layerName} 
+    where 1=1
+    <if test="filter != null and filter != ''">
+			and	( ${filter} )
+	</if>
+	<if test="spatialFilter!=null and buffDis!=null">
+			and	ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326),${buffDis})) = true
+	</if>
+	
+	<if test="orderByFields != null and orderByFields != ''">
+			 ${orderByFields}
+	</if>
+	<if test="limit != null">
+			 limit ${limit}
+	</if>
+	<if test="current != null and limit != null">
+			  OFFSET (${current}-1)*${limit}
+	</if>
+  </select>
 </mapper>

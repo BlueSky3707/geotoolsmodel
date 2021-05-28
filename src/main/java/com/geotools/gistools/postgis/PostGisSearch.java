@@ -39,45 +39,69 @@ public class PostGisSearch {
     
     @Autowired(required=false)
     CommonMapper commonMapper;
+    /**
+     * @param queryParameter
+     * @return
+     */
     public Features search(QueryParameter queryParameter){
     	Features featuresSet = new Features();
-    	List<Map<String, Object>> lists = commonMapper.search(queryParameter);
-    	List<CallbackAbleFeature> features=new ArrayList<CallbackAbleFeature>();
-    	List<Map<String, Object>> columns = commonMapper.getColumns(queryParameter.getLayerName());
-    	
     	String outFields = queryParameter.getOutFields();
     	List<Field> fields=new ArrayList<Field>();
-		
-		if(outFields==null||outFields.equals("")||outFields.equals("*")) {//不传参默认全部
-			queryParameter.setOutFields("*");
-		}
-		addFields(queryParameter.getOutFields(), fields, columns);
+    	if(outFields==null||outFields.equals("")||outFields.equals("*")) {//不传参默认全部
+    		queryParameter.setOutFields("*");
+    	}
+    	List<Map<String, Object>> lists = commonMapper.search(queryParameter);
+    	creatFeatures(queryParameter, featuresSet, fields, lists);
+    	
+    	
+        return featuresSet;
+    }
+
+    public Features bufferSearch(QueryParameter queryParameter){
+    	Features featuresSet = new Features();
+    	String outFields = queryParameter.getOutFields();
+    	List<Field> fields=new ArrayList<Field>();
+    	if(outFields==null||outFields.equals("")||outFields.equals("*")) {//不传参默认全部
+    		queryParameter.setOutFields("*");
+    	}
+    	List<Map<String, Object>> lists = commonMapper.bufferSearch(queryParameter);
+    	
+    	creatFeatures(queryParameter, featuresSet, fields, lists);
+    	
+        return featuresSet;
+    }
+	/**
+	 * featuresSet属性设置
+	 * @param queryParameter
+	 * @param featuresSet
+	 * @param fields
+	 * @param lists
+	 */
+	private void creatFeatures(QueryParameter queryParameter, Features featuresSet, List<Field> fields,
+			List<Map<String, Object>> lists) {
+		List<CallbackAbleFeature> features=new ArrayList<CallbackAbleFeature>();
+    	List<Map<String, Object>> columns = commonMapper.getColumns(queryParameter.getLayerName());
+    	
+    	addFields(queryParameter.getOutFields(), fields, columns);//生成fields
     	for (Map<String, Object> map : lists) {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		if(queryParameter.isReturnGeometry()) {
     			String wkt = map.get("geom").toString();
-				callbackAbleFeature.setWktGeo(wkt);		
+    			callbackAbleFeature.setWktGeo(wkt);		
     		}
     		HashMap<String, Object> hashMap = new HashMap<String, Object>();
     		for (Field field : fields) {
     			hashMap.put(field.getName(), map.get(field.getName()));
-			}
+    		}
     		callbackAbleFeature.setAttributes(hashMap);
     		features.add(callbackAbleFeature);
     		
-		}
-
-//    	String outFields = queryParameter.getOutFields();
+    	}
     	featuresSet.setAllCount(lists.size());
     	featuresSet.setLayerName(queryParameter.getLayerName());
     	featuresSet.setFeatures(features);
     	featuresSet.setFields(fields);
-    	
-        return featuresSet;
-    }
-    public Features bufferSearch(QueryParameter queryParameter){
-        return null;
-    }
+	}
     
 	/**
 	 * 按行政区名称或代码查询
@@ -107,7 +131,6 @@ public class PostGisSearch {
     			hashMap.put(field.getName(), map.get(field.getName()));
 			}
     		callbackAbleFeature.setAttributes(hashMap);
-    		
     		
     		features.add(callbackAbleFeature);
     	}

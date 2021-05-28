@@ -29,7 +29,7 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
     }
 
     @Override
-    public Features bufferSearch(QueryParameter queryParameter) throws ExceptionMsg {
+    public Features bufferSearch(QueryParameter queryParameter) {
         Features features= postGisSearch.bufferSearch(queryParameter);
         return features;
     }
