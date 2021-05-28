@@ -99,7 +99,7 @@
 			and	( ${filter} )
 	</if>
 	<if test="spatialFilter!=null and buffDis!=null">
-			and	ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326),${buffDis})) = true
+			and	ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
 	</if>
 	
 	<if test="orderByFields != null and orderByFields != ''">

@@ -87,7 +87,7 @@ public class SpatialDataQueryController {
             @RequestParam(value = "isReturnGeometry", required = true) Boolean isReturnGeometry,
             @RequestParam(value = "orderByFields", required = false) String orderByFields,
             
-            @RequestParam(value = "buffDis", required = false) Integer buffDis,
+            @RequestParam(value = "buffDis", required = false, defaultValue = "0") Integer buffDis,
             @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
             @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit){
     	ApiResult apiData=new ApiResult();
