@@ -1,6 +1,16 @@
 package com.geotools.gistools.utils;
 
 import com.geotools.gistools.beans.TileBox;
+import com.geotools.gistools.mapper.TileMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.imageio.stream.FileImageOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：
@@ -8,11 +18,15 @@ import com.geotools.gistools.beans.TileBox;
  * @Author: ddw
  * @Date: 2021/5/21 16:46
  */
+
+@Component
 public class TileUtils {
+    @Autowired(required = false)
+    TileMapper tileMapper;
     /**
      * 根据经纬度和缩放等级，求得瓦片路径
      * **/
-    public static String getTileNumber(final double lat, final double lon, final int zoom) {
+    public  String  getTileNumber(final double lat, final double lon, final int zoom) throws IOException {
         int xtile = (int)Math.floor( (lon + 180) / 360 * (1<<zoom) ) ;
         int ytile = (int)Math.floor( (1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * (1<<zoom) ) ;
         if (xtile < 0)
@@ -23,14 +37,22 @@ public class TileUtils {
             ytile=0;
         if (ytile >= (1<<zoom))
             ytile=((1<<zoom)-1);
+        TileBox tileBox=tile2boundingBox(xtile,ytile,zoom);
+        List<Map> mpas= tileMapper.getSimpleTile(tileBox);
+        byte[] dd= (byte[])mpas.get(0).get("tile");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(new File("D:\\soft\\pics.png"));
+        imageOutput.write(dd, 0, dd.length);
+        imageOutput.close();
+        System.out.println( tileMapper.getSimpleTile(tileBox));
         return("" + zoom + "/" + xtile + "/" + ytile);
     }
+
 
 
     /**
      * 瓦片获得范围
      * **/
-    public static TileBox tile2boundingBox(final int x, final int y, final int zoom) {
+    public  TileBox tile2boundingBox(final int x, final int y, final int zoom) {
         //BoundingBox bb = new BoundingBox();
         TileBox bb=new TileBox();
         bb.setYmax(tile2lat(y, zoom));
@@ -43,7 +65,7 @@ public class TileUtils {
     /**
      * 瓦片转换经度
      * **/
-    public static double tile2lon(int x, int z) {
+    public  double tile2lon(int x, int z) {
         return x / Math.pow(2.0, z) * 360.0 - 180;
     }
 
@@ -55,7 +77,7 @@ public class TileUtils {
      * @return
      * @modify {原因} by zhaoquanfeng 2018年8月13日 下午7:44:08
      */
-    public static double tile2lat(int y, int z) {
+    public  double tile2lat(int y, int z) {
         double n = Math.PI - (2.0 * Math.PI * y) / Math.pow(2.0, z);
         return Math.toDegrees(Math.atan(Math.sinh(n)));
     }

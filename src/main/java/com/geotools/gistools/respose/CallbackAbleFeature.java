@@ -17,8 +17,9 @@ public class CallbackAbleFeature implements Serializable {
     private Map<String,Object> attributes = new LinkedHashMap<String, Object>();
     //几何体
     private Geometry geometry = null;
-  //wkt
-    public String wktGeo="";
+
+    //wkt
+    public String geoJson="";
     /** 几何类型. */
     private String geometryType = null;
     public Map<String, Object> getAttributes() {
@@ -36,11 +37,13 @@ public class CallbackAbleFeature implements Serializable {
         }
         this.geometry=geometry;
     }
-    public void setWktGeo(String strWkt){
-        this.wktGeo=strWkt;
+
+    public void setGeoJson(String strWkt){
+        this.geoJson=strWkt;
     }
-    public String getWktGeo(String wktName){
-        return wktName;
+    public String getGeoJson(String geoJson){
+        return geoJson;
+
     }
 
     @SuppressWarnings("unchecked")

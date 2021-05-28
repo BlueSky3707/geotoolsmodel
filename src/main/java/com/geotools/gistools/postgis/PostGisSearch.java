@@ -1,7 +1,4 @@
 package com.geotools.gistools.postgis;
-
-
-import com.alibaba.fastjson.JSON;
 import com.geotools.gistools.mapper.CityptDao;
 import com.geotools.gistools.mapper.CommonMapper;
 import com.geotools.gistools.request.QueryParam;
@@ -39,10 +36,12 @@ public class PostGisSearch {
     
     @Autowired(required=false)
     CommonMapper commonMapper;
+
     /**
      * @param queryParameter
      * @return
      */
+
     public Features search(QueryParameter queryParameter){
     	Features featuresSet = new Features();
     	String outFields = queryParameter.getOutFields();
@@ -86,16 +85,20 @@ public class PostGisSearch {
     	for (Map<String, Object> map : lists) {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		if(queryParameter.isReturnGeometry()) {
-    			String wkt = map.get("geom").toString();
-    			callbackAbleFeature.setWktGeo(wkt);		
+    			String wkt = map.get("geom").toString();			
+				callbackAbleFeature.setGeoJson(wkt);
+
+
     		}
     		HashMap<String, Object> hashMap = new HashMap<String, Object>();
+
     		for (Field field : fields) {
     			hashMap.put(field.getName(), map.get(field.getName()));
     		}
+
     		callbackAbleFeature.setAttributes(hashMap);
     		features.add(callbackAbleFeature);
-    		
+
     	}
     	featuresSet.setAllCount(lists.size());
     	featuresSet.setLayerName(queryParameter.getLayerName());
@@ -124,7 +127,7 @@ public class PostGisSearch {
     		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
     		//获取几何信息
     		String wkt = map.get("geom").toString();
-			callbackAbleFeature.setWktGeo(wkt);
+			callbackAbleFeature.setGeoJson(wkt);
     		//生成属性
     		HashMap<String, Object> hashMap = new HashMap<String, Object>();
     		for (Field field : fields) {

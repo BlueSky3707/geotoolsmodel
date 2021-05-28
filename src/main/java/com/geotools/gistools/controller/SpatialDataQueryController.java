@@ -1,5 +1,6 @@
 package com.geotools.gistools.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.geotools.gistools.exception.ExceptionMsg;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
@@ -63,7 +64,6 @@ public class SpatialDataQueryController {
         QueryParameter param=new QueryParameter(layerName,filter,spatialFilter,outFields,isReturnGeometry,orderByFields,spatialRel,current,limit);
       
         Features pFeartrues= spatialDataQueryService.search(param);
-        
         apiData.setData(pFeartrues);
         return apiData;
     }

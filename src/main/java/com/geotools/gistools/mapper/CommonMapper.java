@@ -24,4 +24,5 @@ public interface CommonMapper {
 	 List<Map<String, Object>> getColumns(@Param("tablename") String tablename);
 	 List<Map<String, Object>> getDataByNameOrCode(QueryParam queryParam);
 
+
 }

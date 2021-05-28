@@ -1,7 +1,6 @@
 package com.geotools.gistools.utils;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
