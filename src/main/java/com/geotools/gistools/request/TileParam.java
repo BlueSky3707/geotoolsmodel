@@ -11,16 +11,16 @@ import com.geotools.gistools.exception.ExceptionMsg;
 
 public class TileParam extends  ValidParameter{
     public String layerName;
-    public Double centerX;
-    public Double centerY;
+    public int row;
+    public int col;
     public Integer zoom;
 
-    public Double getCenterX() {
-        return centerX;
+    public int getRow() {
+        return row;
     }
 
-    public Double getCenterY() {
-        return centerY;
+    public int getCol() {
+        return col;
     }
 
     public Integer getZoom() {
@@ -31,12 +31,12 @@ public class TileParam extends  ValidParameter{
         return layerName;
     }
 
-    public void setCenterX(Double centerX) {
-        this.centerX = centerX;
+    public void setRow(int row) {
+        this.row = row;
     }
 
-    public void setCenterY(Double centerY) {
-        this.centerY = centerY;
+    public void setCol(int col) {
+        this.col = col;
     }
 
     public void setLayerName(String layerName) {

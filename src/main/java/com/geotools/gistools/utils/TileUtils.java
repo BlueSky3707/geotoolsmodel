@@ -2,6 +2,7 @@ package com.geotools.gistools.utils;
 
 import com.geotools.gistools.beans.TileBox;
 import com.geotools.gistools.mapper.TileMapper;
+import com.geotools.gistools.request.TileParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,14 +38,16 @@ public class TileUtils {
             ytile=0;
         if (ytile >= (1<<zoom))
             ytile=((1<<zoom)-1);
-        TileBox tileBox=tile2boundingBox(xtile,ytile,zoom);
-        List<Map> mpas= tileMapper.getSimpleTile(tileBox);
-        byte[] dd= (byte[])mpas.get(0).get("tile");
-        FileImageOutputStream imageOutput = new FileImageOutputStream(new File("D:\\soft\\pics.png"));
-        imageOutput.write(dd, 0, dd.length);
-        imageOutput.close();
-        System.out.println( tileMapper.getSimpleTile(tileBox));
         return("" + zoom + "/" + xtile + "/" + ytile);
+    }
+    public byte[] getTileData(TileParam tileParam){
+        TileBox tileBox= tile2boundingBox(tileParam.row,tileParam.col,tileParam.getZoom(),tileParam.layerName);
+        System.out.println(tileBox);
+        List<Map> mpas= tileMapper.getSimpleTile(tileBox);
+
+        byte[] dd= (byte[])mpas.get(0).get("tile");
+        System.out.println(dd);
+        return dd;
     }
 
 
@@ -52,13 +55,14 @@ public class TileUtils {
     /**
      * 瓦片获得范围
      * **/
-    public  TileBox tile2boundingBox(final int x, final int y, final int zoom) {
+    public  TileBox tile2boundingBox(final int x, final int y, final int zoom,String layerName) {
         //BoundingBox bb = new BoundingBox();
         TileBox bb=new TileBox();
         bb.setYmax(tile2lat(y, zoom));
         bb.setYmin(tile2lat(y + 1, zoom));
         bb.setXmin( tile2lon(x, zoom));
         bb.setXmax(tile2lon(x + 1, zoom));
+        bb.setLayerName(layerName);
         return bb;
     }
 

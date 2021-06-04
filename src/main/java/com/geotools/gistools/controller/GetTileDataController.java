@@ -8,11 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -30,19 +33,19 @@ public class GetTileDataController {
     @Autowired
     private GetTileUrlService getTileUrlService;
     @RequestMapping(value = "/getSimpleTileUrl",method = RequestMethod.GET)
-    public String getSimpleTileUrl(@RequestParam(value = "layerName", required = true) String layerName,
-                                   @RequestParam(value = "ceterX", required = true) Double ceterX,
-                                   @RequestParam(value = "ceterY", required = true) Double ceterY,
-                                   @RequestParam(value = "layerZoom", required = true) int layerZoom) throws IOException {
+    public Object getSimpleTileUrl(@RequestParam(value = "layerName", required = true) String layerName,
+                                   @RequestParam(value = "row", required = true) int row,
+                                   @RequestParam(value = "col", required = true) int col,
+                                   @RequestParam(value = "layerZoom", required = true) int layerZoom,
+                                   HttpServletResponse httpServletRequest) throws IOException {
 
-
-        System.out.println(111);
-        TileParam tileParam=new TileParam();
-        tileParam.centerX=ceterX;
-        tileParam.centerY=ceterY;
+       TileParam tileParam=new TileParam();
+        tileParam.row=row;
+        tileParam.col=col;
         tileParam.zoom=layerZoom;
-        getTileUrlService.getSimpleTileUrl(tileParam);
-        return "";
+        tileParam.layerName=layerName;
+        httpServletRequest.setContentType("application/x-protobuf;type=mapbox-vector;chartset=UTF-8");
+        return getTileUrlService.getSimpleTileUrl(tileParam);
 
     }
 }

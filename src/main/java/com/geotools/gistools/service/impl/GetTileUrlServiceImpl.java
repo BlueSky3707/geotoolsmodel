@@ -21,8 +21,8 @@ public class GetTileUrlServiceImpl implements GetTileUrlService {
     @Autowired(required=false)
     private TileUtils tileUtils;
     @Override
-    public String getSimpleTileUrl(TileParam tileParam) throws IOException {
+    public byte[] getSimpleTileUrl(TileParam tileParam) throws IOException {
 
-        return tileUtils.getTileNumber(tileParam.centerX,tileParam.centerY,tileParam.zoom);
+        return tileUtils.getTileData(tileParam);
     }
 }

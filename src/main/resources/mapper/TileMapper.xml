@@ -15,7 +15,7 @@
         TRUE
         ) AS geom
         FROM
-        provinces_china t
+        ${layerName} t
         ) AS tile
         WHERE
         tile.geom IS NOT NULL;

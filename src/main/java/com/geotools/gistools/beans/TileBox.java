@@ -14,5 +14,6 @@ public class TileBox {
     double Xmin;
     double Ymax;
     double Ymin;
+    String layerName;
 
 }

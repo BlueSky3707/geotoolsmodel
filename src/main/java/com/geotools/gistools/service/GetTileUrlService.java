@@ -12,5 +12,5 @@ import java.io.UnsupportedEncodingException;
  * @Date: 2021/5/27 14:14
  */
 public interface GetTileUrlService {
-    String getSimpleTileUrl(TileParam tileParam) throws IOException;
+    byte[] getSimpleTileUrl(TileParam tileParam) throws IOException;
 }

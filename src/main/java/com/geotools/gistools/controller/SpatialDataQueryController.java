@@ -39,7 +39,7 @@ public class SpatialDataQueryController {
     @Autowired
     private SpatialDataQueryService spatialDataQueryService;
     @ApiOperation(value = "空间数据属性查询")
-    @RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "api/search", method = RequestMethod.GET, produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "layerName", required = true, dataType = "String", value = "空间数据库中的图层名称"),
             @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性过滤条件，语法请参考SQL，例如：LXBM='G45' AND SXXFX=1"),
             @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
