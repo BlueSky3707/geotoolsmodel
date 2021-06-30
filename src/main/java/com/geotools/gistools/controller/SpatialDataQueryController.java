@@ -1,6 +1,7 @@
 package com.geotools.gistools.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.geotools.gistools.exception.ExceptionMsg;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
@@ -16,12 +17,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -129,5 +139,52 @@ public class SpatialDataQueryController {
           
           apiData.setData(pFeartrues);
           return apiData;
+    }
+    
+    /**
+     * 批量新增
+     * @param objs
+     * [{tablename:"test",items:[{name:"name",value:"是违法"},{name:"descrape",value:"规划"},{name:"geom",value:'POINT(108.58 35.65)'}]}]
+     * @return
+     */
+    @PostMapping("/insertData")  
+	@ResponseBody
+	@CrossOrigin
+	int insertData(@RequestBody List<HashMap<String, Object>> objs) { 
+    	int num=0;
+		for (HashMap<String, Object> obj : objs) {
+			num+= spatialDataQueryService.insertData(obj); 
+		}
+    	return num;
+	}
+    /**
+     * 批量更新
+     * @param objs[
+     *  {tablename:"test",
+     *       items:[{name:"name",value:"是"},{name:"descrape",value:"规"},{name:"geom",value:'POINT(108.54 35.29)'}],
+     *       wheres:[{name:"gid",value:2}]}
+     *	]
+     * @return
+     */
+    @PostMapping("/updateData")  
+    @ResponseBody
+    @CrossOrigin
+    int updateData(@RequestBody List<HashMap<String, Object>> objs) { 
+    	int num=0;
+    	for (HashMap<String, Object> obj : objs) {
+    		num+= spatialDataQueryService.updateData(obj); 
+    	}
+    	return num;
+    }
+    /**
+     * 批量删除
+     * @param obj 例：{tablename:"test",filedid:"gid", list:[2,6]}
+     * @return
+     */
+    @PostMapping("/deleteData")  
+    @ResponseBody
+    @CrossOrigin
+    int deleteData(@RequestBody HashMap<String, Object> obj) { 
+    		return	 spatialDataQueryService.deleteData(obj); 
     }
 }

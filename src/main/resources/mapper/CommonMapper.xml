@@ -112,4 +112,80 @@
 			  OFFSET (${current}-1)*${limit}
 	</if>
   </select>
+  <!--新增  -->
+   <insert id="insertData" parameterType="java.util.HashMap" >
+        insert into ${tablename}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        	<foreach collection="items" item="item" separator=",">
+	        	<if test="item.value != null">
+					${item.name}
+				</if>
+			</foreach>
+     	</trim>
+     	values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<foreach collection="items" item="item" separator=",">
+				<if test="item.value != null">
+					<choose>
+	                <when test="item.name=='geom'">
+	                    ST_GeomFromText(#{item.value},4326)
+	                </when>
+	                <otherwise>
+	                    #{item.value}
+	                </otherwise>
+	            </choose>
+				</if>
+			</foreach>
+		</trim>
+    </insert>
+    
+    <insert id="insertDataOracle"  statementType="STATEMENT">
+		  DECLARE
+		     REALLYBIGTEXTSTRING CLOB :='${sqlData}';
+		   begin
+		        <choose>
+		            <when test="sqlData !=null and sqlData != ''">
+		                INSERT INTO ${layerName}(${layerfields}) VALUES(${layerValues},sde.st_geometry(REALLYBIGTEXTSTRING,4326));
+		            </when>
+		            <otherwise>
+		                INSERT INTO ${layerName}(${layerfields}) VALUES(${layerValues});
+		            </otherwise>
+		        </choose>
+		   end ;
+
+    </insert>
+    <!-- 更新 -->
+     <update id="updateData" parameterType="java.util.HashMap" >
+        update ${tablename}
+		<trim prefix="set" suffix="" suffixOverrides=",">
+			<foreach collection="items" item="item" separator=",">
+				<if test="item.value != null">
+					${item.name} = 
+					<choose>
+		                <when test="item.name=='geom'">
+		                    ST_GeomFromText(#{item.value},4326)
+		                </when>
+		                <otherwise>
+		                    #{item.value}
+		                </otherwise>
+		            </choose>
+				</if>
+			</foreach>
+			</trim>
+			<if test="wheres != null">
+				<where> 
+				    <foreach collection="wheres" item="item" separator="and">
+						${item.name} = #{item.value}
+					</foreach>
+				</where>
+			</if>
+    </update>
+    <!-- 删除 -->
+    <delete id="deleteData" parameterType="java.util.HashMap">
+		delete from ${tablename}
+		where ${filedid} in 
+		<foreach collection="list" item="id" open="(" close=")" separator="," >
+	         #{id}
+	    </foreach>
+	</delete>
 </mapper>

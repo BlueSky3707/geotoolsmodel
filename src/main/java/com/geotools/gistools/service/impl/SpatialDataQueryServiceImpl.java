@@ -1,6 +1,7 @@
 package com.geotools.gistools.service.impl;
 
 import com.geotools.gistools.exception.ExceptionMsg;
+import com.geotools.gistools.mapper.CommonMapper;
 import com.geotools.gistools.postgis.PostGisSearch;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 /**
  * 功能描述：
@@ -22,6 +24,8 @@ import java.rmi.RemoteException;
 public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
    @Resource
     private PostGisSearch postGisSearch;
+   @Resource
+   private CommonMapper commonMapper;
     @Override
     public Features search(QueryParameter queryParameter) throws RemoteException, ExceptionMsg {
         Features features= postGisSearch.search(queryParameter);
@@ -38,5 +42,21 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
 	public Features getDataByNameOrCode(QueryParam queryParam) {
 		 Features features= postGisSearch.getDataByNameOrCode(queryParam);
 		return features;
+	}
+	
+	@Override
+	public int insertData(HashMap<String, Object> obj) {
+		
+		return commonMapper.insertData(obj);
+	}
+	@Override
+	public int updateData(HashMap<String, Object> obj) {
+		
+		return commonMapper.updateData(obj);
+	}
+	@Override
+	public int deleteData(HashMap<String, Object> obj) {
+		
+		return commonMapper.deleteData(obj);
 	}
 }

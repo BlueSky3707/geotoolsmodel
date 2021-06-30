@@ -1,5 +1,6 @@
 package com.geotools.gistools.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,5 +25,7 @@ public interface CommonMapper {
 	 List<Map<String, Object>> getColumns(@Param("tablename") String tablename);
 	 List<Map<String, Object>> getDataByNameOrCode(QueryParam queryParam);
 
-
+	 int insertData(HashMap<String, Object> obj);
+	 int updateData(HashMap<String, Object> obj);
+	 int deleteData(HashMap<String, Object> obj);
 }

@@ -18,6 +18,7 @@ public class GistoolsApplication  extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(GistoolsApplication.class, args);
+        System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow","|{}");
 
     }
 
