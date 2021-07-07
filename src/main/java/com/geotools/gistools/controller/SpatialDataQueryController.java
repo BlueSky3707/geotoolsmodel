@@ -59,7 +59,7 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "spatialRel", required = true, dataType = "String", allowableValues = "INTERSECTS,CONTAINS,DISJOINT,TOUCHES,CROSSES,WITHIN,OVERLAPS", value = "空间位置关系"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
             @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为100")})
-    @Cacheable
+   // @Cacheable
     public ApiResult search(@RequestParam(value = "layerName", required = true) String layerName,
                             @RequestParam(value = "filter", required = false) String filter,
                             @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
@@ -143,14 +143,16 @@ public class SpatialDataQueryController {
     
     /**
      * 批量新增
-     * @param objs
-     * [{tablename:"test",items:[{name:"name",value:"是违法"},{name:"descrape",value:"规划"},{name:"geom",value:'POINT(108.58 35.65)'}]}]
+     * @param map
+     * {tablename:"test",list:[{name:"讨厌",descrape:"规划",geom:'POINT(109.28 37.75)'},{name:"讨厌22",descrape:"规划2",geom:'POINT(109.38 36.75)'}]
      * @return
      */
     @PostMapping("/insertData")  
 	@ResponseBody
 	@CrossOrigin
-	int insertData(@RequestBody List<HashMap<String, Object>> objs) { 
+	int insertData(@RequestBody HashMap<String, Object> map) { 
+//	int insertData(@RequestBody List<HashMap<String, Object>> objs) { 
+    	List<HashMap<String, Object>> objs = getData(map,0);
     	int num=0;
 		for (HashMap<String, Object> obj : objs) {
 			num+= spatialDataQueryService.insertData(obj); 
@@ -159,17 +161,18 @@ public class SpatialDataQueryController {
 	}
     /**
      * 批量更新
-     * @param objs[
-     *  {tablename:"test",
-     *       items:[{name:"name",value:"是"},{name:"descrape",value:"规"},{name:"geom",value:'POINT(108.54 35.29)'}],
-     *       wheres:[{name:"gid",value:2}]}
-     *	]
+     * @param map{tablename:"test",list:[
+        {name:"讨厌00",descrape:"规划0",geom:'POINT(109.28 37.75)',wheres:{gid:20}},
+         {name:"讨厌0",descrape:"规划0",geom:'POINT(109.38 35.75)',wheres:{gid:21}}
+        ]}
      * @return
      */
     @PostMapping("/updateData")  
     @ResponseBody
     @CrossOrigin
-    int updateData(@RequestBody List<HashMap<String, Object>> objs) { 
+    int updateData(@RequestBody HashMap<String, Object> map) {
+//    int updateData(@RequestBody List<HashMap<String, Object>> objs) {
+    	List<HashMap<String, Object>> objs = getData(map,1);
     	int num=0;
     	for (HashMap<String, Object> obj : objs) {
     		num+= spatialDataQueryService.updateData(obj); 
@@ -186,5 +189,43 @@ public class SpatialDataQueryController {
     @CrossOrigin
     int deleteData(@RequestBody HashMap<String, Object> obj) { 
     		return	 spatialDataQueryService.deleteData(obj); 
+    }
+    
+   //修改数据格式
+	List<HashMap<String, Object>> getData(HashMap<String, Object> obj,int state) { 
+    	List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
+    	String tablename = obj.get("tablename").toString();
+    	List<Map<String, Object>> list  = new ArrayList<Map<String, Object>>();
+    	list = (List<Map<String, Object>>) obj.get("list");
+    	for (Map<String, Object> map : list) {
+    		HashMap<String, Object> map2 = new HashMap<String, Object>();
+    		map2.put("tablename", tablename);
+    		List<Map<String, Object>> list2  = new ArrayList<Map<String, Object>>();
+    		for(String key : map.keySet()){
+    			if(!key.equals("wheres")) {
+    				HashMap<String, Object> map3 = new HashMap<String, Object>();
+        			map3.put("name", key);
+        			map3.put("value", map.get(key));
+        			list2.add(map3);
+    			}
+    			
+		    }
+    		map2.put("items", list2);
+    		if(state==1) {
+    			List<Map<String, Object>> list4  = new ArrayList<Map<String, Object>>();
+    			Map<String, Object> map6  = new HashMap<String, Object>();
+    			map6 =  (Map<String, Object>) map.get("wheres");
+				for(String key : map6.keySet()){
+        			HashMap<String, Object> map5 = new HashMap<String, Object>();
+        			map5.put("name", key);
+        			map5.put("value", map6.get(key));
+        			list4.add(map5);	  
+    		    }
+    			map2.put("wheres", list4);
+    		}
+    		items.add(map2);
+    		
+		}
+		return	  items;
     }
 }
