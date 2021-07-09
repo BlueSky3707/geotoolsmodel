@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 功能描述：
@@ -58,5 +59,10 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
 	public int deleteData(HashMap<String, Object> obj) {
 		
 		return commonMapper.deleteData(obj);
+	}
+	@Override
+	public List<HashMap<String, Object>> getGroupData(String layername,String citytable,String outFields,String type) {
+		
+		return commonMapper.getGroupData(layername,citytable,outFields,type);
 	}
 }

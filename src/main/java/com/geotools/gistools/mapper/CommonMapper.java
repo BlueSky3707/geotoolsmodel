@@ -28,4 +28,8 @@ public interface CommonMapper {
 	 int insertData(HashMap<String, Object> obj);
 	 int updateData(HashMap<String, Object> obj);
 	 int deleteData(HashMap<String, Object> obj);
+	 List<HashMap<String, Object>> getGroupData(@Param("layername") String layername,
+			 @Param("citytablename") String citytablename,
+			 @Param("outFields") String outFields,
+			 @Param("type") String type);
 }

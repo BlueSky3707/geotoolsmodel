@@ -188,4 +188,14 @@
 	         #{id}
 	    </foreach>
 	</delete>
+	<!-- 查询统计信息 -->
+	<select id="getGroupData" parameterType="java.lang.String"  resultType="java.util.Map">
+	  select 
+		<if test="outFields != null and outFields != ''">
+	        ${outFields},
+	    </if>
+		st_asgeojson(st_centroid(t1.geom)) as geogeom,
+	  (select ${type} from ${layername} t2 where st_intersects(t1.geom,t2.geom)=true) as count from ${citytablename} t1
+	 <!--  where t1.name=#{name} -->
+    </select>
 </mapper>

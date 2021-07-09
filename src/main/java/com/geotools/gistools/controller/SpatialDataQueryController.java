@@ -12,6 +12,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +191,27 @@ public class SpatialDataQueryController {
     @CrossOrigin
     int deleteData(@RequestBody HashMap<String, Object> obj) { 
     		return	 spatialDataQueryService.deleteData(obj); 
+    }
+    /**
+     * 城市数据统计
+     * @param layername要统计表名"cun_sx"
+     * @param citytablename城市表"city_gz"
+     * @param outFields城市表字段cityname,citycode
+     * @param type统计格式 数量"count(*)",求和"sum(length)",平均"avg(length)"
+     * @return
+     */
+    @GetMapping("/getGroupData")  
+    @ResponseBody
+    @CrossOrigin
+    List<HashMap<String, Object>> getGroupData(
+    		@RequestParam(value = "layername", required = true) String layername,
+    		@RequestParam(value = "citytablename", required = true) String citytablename,
+    		@RequestParam(value = "outFields", required = true) String outFields,
+    		@RequestParam(value = "type", required = true) String type) { 
+
+    		List<HashMap<String, Object>> groupData = spatialDataQueryService.getGroupData(layername,citytablename,outFields,type);
+
+    	return groupData;
     }
     
    //修改数据格式
