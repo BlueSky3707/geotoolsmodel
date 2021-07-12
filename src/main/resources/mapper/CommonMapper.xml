@@ -194,8 +194,13 @@
 		<if test="outFields != null and outFields != ''">
 	        ${outFields},
 	    </if>
-		st_asgeojson(st_centroid(t1.geom)) as geogeom,
+		st_asgeojson(st_centroid(t1.geom)) as geoJson,
 	  (select ${type} from ${layername} t2 where st_intersects(t1.geom,t2.geom)=true) as count from ${citytablename} t1
 	 <!--  where t1.name=#{name} -->
+    </select>
+    
+    <!-- 经纬度查询城市名 -->
+	<select id="getCityNameByLatLng" parameterType="java.lang.String"  resultType="java.lang.String">
+		select ${cityname} from ${tablename} where st_intersects(geom,ST_GeomFromText('POINT(${lng} ${lat})',4326))=true 
     </select>
 </mapper>

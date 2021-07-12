@@ -32,4 +32,8 @@ public interface CommonMapper {
 			 @Param("citytablename") String citytablename,
 			 @Param("outFields") String outFields,
 			 @Param("type") String type);
+	 String getCityNameByLatLng(@Param("tablename") String tablename,
+			 @Param("cityname") String cityname,
+			 @Param("lng") String lng,
+			 @Param("lat") String lat);
 }

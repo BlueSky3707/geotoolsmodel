@@ -214,6 +214,24 @@ public class SpatialDataQueryController {
     	return groupData;
     }
     
+    @ApiOperation(value = "空间数据属性查询")
+    @RequestMapping(value = "getCityNameByLatLng", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "tablename", required = true, dataType = "String", value = "表名"),
+            @ApiImplicitParam(paramType = "query", name = "cityname", required = true, dataType = "String", value = "城市名字段"),
+            @ApiImplicitParam(paramType = "query", name = "lng", required = true, dataType = "String", value = "经度"),
+            @ApiImplicitParam(paramType = "query", name = "lat", required = true, dataType = "String", value = "纬度")})
+    @Cacheable
+    public ApiResult getCityNameByLatLng(
+    		@RequestParam(value = "tablename", required = true) String tablename,
+    		@RequestParam(value = "cityname", required = true) String cityname,
+    		@RequestParam(value = "lng", required = true) String lng,
+    		@RequestParam(value = "lat", required = true) String lat) { 
+    	ApiResult apiData=new ApiResult();
+    	String citydata = spatialDataQueryService.getCityNameByLatLng(tablename,cityname,lng,lat);
+    	apiData.setData(citydata);
+    	return apiData;
+    }
+    
    //修改数据格式
 	List<HashMap<String, Object>> getData(HashMap<String, Object> obj,int state) { 
     	List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();

@@ -26,4 +26,5 @@ public interface SpatialDataQueryService {
 	int updateData(HashMap<String, Object> obj);
 	int deleteData(HashMap<String, Object> obj);
 	List<HashMap<String, Object>> getGroupData(String layername, String citytablename,String outFields,String type);
+	String getCityNameByLatLng(String tablename,String cityname,String lng,String lat);
 }

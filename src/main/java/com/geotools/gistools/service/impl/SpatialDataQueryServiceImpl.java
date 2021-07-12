@@ -65,4 +65,9 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
 		
 		return commonMapper.getGroupData(layername,citytable,outFields,type);
 	}
+	@Override
+	public String getCityNameByLatLng(String tablename,String cityname,String lng,String lat) {
+		
+		return commonMapper.getCityNameByLatLng(tablename,cityname,lng,lat);
+	}
 }
