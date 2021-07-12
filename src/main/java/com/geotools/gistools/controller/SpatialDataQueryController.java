@@ -153,7 +153,7 @@ public class SpatialDataQueryController {
 	@ResponseBody
 	@CrossOrigin
 	int insertData(@RequestBody HashMap<String, Object> map) { 
-//	int insertData(@RequestBody List<HashMap<String, Object>> objs) { 
+
     	List<HashMap<String, Object>> objs = getData(map,0);
     	int num=0;
 		for (HashMap<String, Object> obj : objs) {
@@ -173,7 +173,7 @@ public class SpatialDataQueryController {
     @ResponseBody
     @CrossOrigin
     int updateData(@RequestBody HashMap<String, Object> map) {
-//    int updateData(@RequestBody List<HashMap<String, Object>> objs) {
+
     	List<HashMap<String, Object>> objs = getData(map,1);
     	int num=0;
     	for (HashMap<String, Object> obj : objs) {
@@ -214,7 +214,7 @@ public class SpatialDataQueryController {
     	return groupData;
     }
     
-    @ApiOperation(value = "空间数据属性查询")
+    @ApiOperation(value = "通过经纬度获取所在城市名称")
     @RequestMapping(value = "getCityNameByLatLng", method = RequestMethod.GET, produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "tablename", required = true, dataType = "String", value = "表名"),
             @ApiImplicitParam(paramType = "query", name = "cityname", required = true, dataType = "String", value = "城市名字段"),
