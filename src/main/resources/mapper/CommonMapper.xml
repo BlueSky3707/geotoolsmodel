@@ -99,7 +99,7 @@
 			and	( ${filter} )
 	</if>
 	<if test="spatialFilter!=null and buffDis!=null">
-			and	ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326),${buffDis})) = true
+			and	ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
 	</if>
 	
 	<if test="orderByFields != null and orderByFields != ''">
@@ -112,4 +112,95 @@
 			  OFFSET (${current}-1)*${limit}
 	</if>
   </select>
+  <!--新增  -->
+   <insert id="insertData" parameterType="java.util.HashMap" >
+        insert into ${tablename}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        	<foreach collection="items" item="item" separator=",">
+	        	<if test="item.value != null">
+					${item.name}
+				</if>
+			</foreach>
+     	</trim>
+     	values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<foreach collection="items" item="item" separator=",">
+				<if test="item.value != null">
+					<choose>
+	                <when test="item.name=='geom'">
+	                    ST_GeomFromText(#{item.value},4326)
+	                </when>
+	                <otherwise>
+	                    #{item.value}
+	                </otherwise>
+	            </choose>
+				</if>
+			</foreach>
+		</trim>
+    </insert>
+    
+    <insert id="insertDataOracle"  statementType="STATEMENT">
+		  DECLARE
+		     REALLYBIGTEXTSTRING CLOB :='${sqlData}';
+		   begin
+		        <choose>
+		            <when test="sqlData !=null and sqlData != ''">
+		                INSERT INTO ${layerName}(${layerfields}) VALUES(${layerValues},sde.st_geometry(REALLYBIGTEXTSTRING,4326));
+		            </when>
+		            <otherwise>
+		                INSERT INTO ${layerName}(${layerfields}) VALUES(${layerValues});
+		            </otherwise>
+		        </choose>
+		   end ;
+
+    </insert>
+    <!-- 更新 -->
+     <update id="updateData" parameterType="java.util.HashMap" >
+        update ${tablename}
+		<trim prefix="set" suffix="" suffixOverrides=",">
+			<foreach collection="items" item="item" separator=",">
+				<if test="item.value != null">
+					${item.name} = 
+					<choose>
+		                <when test="item.name=='geom'">
+		                    ST_GeomFromText(#{item.value},4326)
+		                </when>
+		                <otherwise>
+		                    #{item.value}
+		                </otherwise>
+		            </choose>
+				</if>
+			</foreach>
+			</trim>
+			<if test="wheres != null">
+				<where> 
+				    <foreach collection="wheres" item="item" separator="and">
+						${item.name} = #{item.value}
+					</foreach>
+				</where>
+			</if>
+    </update>
+    <!-- 删除 -->
+    <delete id="deleteData" parameterType="java.util.HashMap">
+		delete from ${tablename}
+		where ${filedid} in 
+		<foreach collection="list" item="id" open="(" close=")" separator="," >
+	         #{id}
+	    </foreach>
+	</delete>
+	<!-- 查询统计信息 -->
+	<select id="getGroupData" parameterType="java.lang.String"  resultType="java.util.Map">
+	  select 
+		<if test="outFields != null and outFields != ''">
+	        ${outFields},
+	    </if>
+		st_asgeojson(st_centroid(t1.geom)) as geoJson,
+	  (select ${type} from ${layername} t2 where st_intersects(t1.geom,t2.geom)=true) as count from ${citytablename} t1
+	 <!--  where t1.name=#{name} -->
+    </select>
+    
+    <!-- 经纬度查询城市名 -->
+	<select id="getCityNameByLatLng" parameterType="java.lang.String"  resultType="java.lang.String">
+		select ${cityname} from ${tablename} where st_intersects(geom,ST_GeomFromText('POINT(${lng} ${lat})',4326))=true 
+    </select>
 </mapper>

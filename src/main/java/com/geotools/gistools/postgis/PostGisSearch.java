@@ -184,7 +184,7 @@ public class PostGisSearch {
 			 data_type="integer";
 		 }else if(data_type.indexOf("character")>-1) {
 			 data_type="string";
-		 }else if(data_type.indexOf("numeric")>-1) {
+		 }else if(data_type.indexOf("numeric")>-1||data_type.indexOf("float8")>-1) {
 			 data_type="double";
 		 }
 		 Field field = new Field(column_name,data_type,column_name);
