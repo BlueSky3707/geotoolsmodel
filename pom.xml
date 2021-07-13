@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.Geotools</groupId>
     <artifactId>gistools</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>gistools</name>
     <description>Demo project for Spring Boot</description>
@@ -128,9 +128,6 @@
             <artifactId>jts</artifactId>
             <version>1.12</version>
         </dependency>
-
-
-
 
     </dependencies>
 

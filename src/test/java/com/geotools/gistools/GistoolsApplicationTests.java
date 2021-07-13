@@ -10,11 +10,5 @@ import java.net.URLDecoder;
 
 @SpringBootTest
 class GistoolsApplicationTests {
-    @Autowired
-    private CityService cityService;
-    @Test
-    void getlist() {
-        System.out.println(cityService.getList());
-    }
 
 }

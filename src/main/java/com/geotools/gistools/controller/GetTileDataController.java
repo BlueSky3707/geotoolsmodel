@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.http.HttpRequest;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,19 +29,17 @@ public class GetTileDataController {
     private static final Logger logger = LoggerFactory.getLogger(GetTileDataController.class);
     @Autowired
     private GetTileUrlService getTileUrlService;
-    @RequestMapping(value = "/getSimpleTileUrl",method = RequestMethod.GET)
-    public Object getSimpleTileUrl(@RequestParam(value = "layerName", required = true) String layerName,
-                                   @RequestParam(value = "row", required = true) int row,
-                                   @RequestParam(value = "col", required = true) int col,
-                                   @RequestParam(value = "layerZoom", required = true) int layerZoom,
-                                   HttpServletResponse httpServletRequest) throws IOException {
+    @RequestMapping(value = "/hxgis/tile/{city}/{z}/{x}/{y}",method = RequestMethod.GET)
+    public Object getSimpleTileUrl(@PathVariable("city") String city,@PathVariable("z") Integer z, @PathVariable("x") Integer x, @PathVariable("y") Integer y,
+                                   HttpServletResponse response,
+                                   HttpServletRequest request) throws IOException {
 
        TileParam tileParam=new TileParam();
-        tileParam.row=row;
-        tileParam.col=col;
-        tileParam.zoom=layerZoom;
-        tileParam.layerName=layerName;
-        httpServletRequest.setContentType("application/x-protobuf;type=mapbox-vector;chartset=UTF-8");
+        tileParam.row=x;
+        tileParam.col=y;
+        tileParam.zoom=z;
+        tileParam.layerName=city;
+        response.setContentType("application/x-protobuf;type=mapbox-vector;chartset=UTF-8");
         return getTileUrlService.getSimpleTileUrl(tileParam);
 
     }
