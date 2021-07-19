@@ -25,4 +25,9 @@ public class GetTileUrlServiceImpl implements GetTileUrlService {
 
         return tileUtils.getTileData(tileParam);
     }
+    @Override
+    public byte[] getAggregationTile(TileParam tileParam) throws IOException {
+    	
+    	return tileUtils.getAggregationTile(tileParam);
+    }
 }

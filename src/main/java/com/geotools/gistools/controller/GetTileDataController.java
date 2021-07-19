@@ -29,6 +29,18 @@ public class GetTileDataController {
     private static final Logger logger = LoggerFactory.getLogger(GetTileDataController.class);
     @Autowired
     private GetTileUrlService getTileUrlService;
+    
+    /**
+     * 普通动态切片
+     * @param city
+     * @param z
+     * @param x
+     * @param y
+     * @param response
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/hxgis/tile/{city}/{z}/{x}/{y}",method = RequestMethod.GET)
     public Object getSimpleTileUrl(@PathVariable("city") String city,@PathVariable("z") Integer z, @PathVariable("x") Integer x, @PathVariable("y") Integer y,
                                    HttpServletResponse response,
@@ -42,5 +54,30 @@ public class GetTileDataController {
         response.setContentType("application/x-protobuf;type=mapbox-vector;chartset=UTF-8");
         return getTileUrlService.getSimpleTileUrl(tileParam);
 
+    }
+    /**
+     * 聚合动态切片
+     * @param city
+     * @param z
+     * @param x
+     * @param y
+     * @param response
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/hxgis/jhtile/{city}/{z}/{x}/{y}",method = RequestMethod.GET)
+    public Object getAggregationTile(@PathVariable("city") String city,@PathVariable("z") Integer z, @PathVariable("x") Integer x, @PathVariable("y") Integer y,
+    		HttpServletResponse response,
+    		HttpServletRequest request) throws IOException {
+    	
+    	TileParam tileParam=new TileParam();
+    	tileParam.row=x;
+    	tileParam.col=y;
+    	tileParam.zoom=z;
+    	tileParam.layerName=city;
+    	response.setContentType("application/x-protobuf;type=mapbox-vector;chartset=UTF-8");
+    	return getTileUrlService.getAggregationTile(tileParam);
+    	
     }
 }

@@ -17,5 +17,6 @@ import java.util.Map;
 @org.apache.ibatis.annotations.Mapper
 public interface TileMapper {
     List<Map> getSimpleTile(TileBox tileBox);
+    List<Map> getAggregationTile(TileBox tileBox);
 }
 

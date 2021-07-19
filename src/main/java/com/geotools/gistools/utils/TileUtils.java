@@ -42,12 +42,21 @@ public class TileUtils {
     }
     public byte[] getTileData(TileParam tileParam){
         TileBox tileBox= tile2boundingBox(tileParam.row,tileParam.col,tileParam.getZoom(),tileParam.layerName);
-        System.out.println(tileBox);
+      
         List<Map> mpas= tileMapper.getSimpleTile(tileBox);
 
         byte[] dd= (byte[])mpas.get(0).get("tile");
-        System.out.println(dd);
+      
         return dd;
+    }
+    public byte[] getAggregationTile(TileParam tileParam){
+    	TileBox tileBox= tile2boundingBox(tileParam.row,tileParam.col,tileParam.getZoom(),tileParam.layerName);
+    	
+    	List<Map> mpas= tileMapper.getAggregationTile(tileBox);
+    	
+    	byte[] dd= (byte[])mpas.get(0).get("tile");
+    	
+    	return dd;
     }
 
 
