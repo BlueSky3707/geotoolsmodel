@@ -4,7 +4,7 @@
 <!--普通动态切片  -->
   <select id="getSimpleTile" parameterType="com.geotools.gistools.beans.TileBox"  resultType="Map">
      SELECT
-        ST_AsMVT (tile) tile
+        ST_AsMVT (tile,'points',4096,'geom') tile
         FROM
         (
         SELECT
@@ -25,7 +25,7 @@
     <!--聚合动态切片  -->
     <select id="getAggregationTile" parameterType="com.geotools.gistools.beans.TileBox"  resultType="Map">
     	SELECT
-        ST_AsMVT (tile) tile
+        ST_AsMVT (tile,'points',4096,'geom') tile
         FROM
         (SELECT 
         st_asmvtgeom ( t.geom,st_makeenvelope (${Xmin}, ${Ymin}, ${Xmax},${Ymax}, 4326),
