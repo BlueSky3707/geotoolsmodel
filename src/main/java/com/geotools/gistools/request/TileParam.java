@@ -14,6 +14,8 @@ public class TileParam extends  ValidParameter{
     public int row;
     public int col;
     public Integer zoom;
+    public Integer xcount;
+    public Integer ycount;
 
     public int getRow() {
         return row;
@@ -51,5 +53,21 @@ public class TileParam extends  ValidParameter{
     public boolean check() throws ExceptionMsg {
         return false;
     }
+
+	public Integer getXcount() {
+		return xcount;
+	}
+
+	public void setXcount(Integer xcount) {
+		this.xcount = xcount;
+	}
+
+	public Integer getYcount() {
+		return ycount;
+	}
+
+	public void setYcount(Integer ycount) {
+		this.ycount = ycount;
+	}
 
 }

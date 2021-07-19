@@ -36,8 +36,8 @@
         FROM
        
 		(SELECT 
-		width_bucket(st_x(geom), ${Xmin} ,${Xmax} ,50) grid_x, 
-		width_bucket(st_y(geom), ${Ymin} , ${Ymax}, 50) grid_y,  
+		width_bucket(st_x(geom), ${Xmin} ,${Xmax} ,${xcount}) grid_x, 
+		width_bucket(st_y(geom), ${Ymin} , ${Ymax}, ${ycount}) grid_y,  
 		count(*),
 		st_astext(st_centroid(st_collect(geom)))geom
 		

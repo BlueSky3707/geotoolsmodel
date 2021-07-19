@@ -66,8 +66,8 @@ public class GetTileDataController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/hxgis/jhtile/{city}/{z}/{x}/{y}",method = RequestMethod.GET)
-    public Object getAggregationTile(@PathVariable("city") String city,@PathVariable("z") Integer z, @PathVariable("x") Integer x, @PathVariable("y") Integer y,
+    @RequestMapping(value = "/hxgis/jhtile/{xcount}/{ycount}/{city}/{z}/{x}/{y}",method = RequestMethod.GET)
+    public Object getAggregationTile(@PathVariable("xcount") Integer xcount,@PathVariable("ycount") Integer ycount,@PathVariable("city") String city,@PathVariable("z") Integer z, @PathVariable("x") Integer x, @PathVariable("y") Integer y,
     		HttpServletResponse response,
     		HttpServletRequest request) throws IOException {
     	
@@ -76,6 +76,8 @@ public class GetTileDataController {
     	tileParam.col=y;
     	tileParam.zoom=z;
     	tileParam.layerName=city;
+    	tileParam.xcount=xcount;
+    	tileParam.ycount=ycount;
     	response.setContentType("application/x-protobuf;type=mapbox-vector;chartset=UTF-8");
     	return getTileUrlService.getAggregationTile(tileParam);
     	

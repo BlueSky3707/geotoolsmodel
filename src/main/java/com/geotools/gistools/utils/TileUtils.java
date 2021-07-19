@@ -51,7 +51,8 @@ public class TileUtils {
     }
     public byte[] getAggregationTile(TileParam tileParam){
     	TileBox tileBox= tile2boundingBox(tileParam.row,tileParam.col,tileParam.getZoom(),tileParam.layerName);
-    	
+    	tileBox.setXcount(tileParam.xcount);
+    	tileBox.setYcount(tileParam.ycount);
     	List<Map> mpas= tileMapper.getAggregationTile(tileBox);
     	
     	byte[] dd= (byte[])mpas.get(0).get("tile");
