@@ -60,7 +60,7 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
             @ApiImplicitParam(paramType = "query", name = "spatialRel", required = true, dataType = "String", allowableValues = "INTERSECTS,CONTAINS,DISJOINT,TOUCHES,CROSSES,WITHIN,OVERLAPS", value = "空间位置关系"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
-            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为100")})
+            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
    // @Cacheable
     public ApiResult search(@RequestParam(value = "layerName", required = true) String layerName,
                             @RequestParam(value = "filter", required = false) String filter,
@@ -70,7 +70,7 @@ public class SpatialDataQueryController {
                             @RequestParam(value = "orderByFields", required = false) String orderByFields,
                             @RequestParam(value = "spatialRel", required = false) String spatialRel,
                             @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
-                            @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) throws RemoteException, ExceptionMsg {
+                            @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit) throws RemoteException, ExceptionMsg {
 //        logger.info("空间数据属性查询调用接口开始=======图层名称:{},属性过滤条件:{},空间过滤条件:{},返回的字段:{},是否返回空间数据:{},排序条件:{},空间位置关系:{},页码:{},每页记录数:{}", layerName, filter, spatialFilter, outFields, isReturnGeometry, orderByFields, spatialRel, current, limit);
         ApiResult apiData=new ApiResult();
         QueryParameter param=new QueryParameter(layerName,filter,spatialFilter,outFields,isReturnGeometry,orderByFields,spatialRel,current,limit);
@@ -90,7 +90,7 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
             @ApiImplicitParam(paramType = "query", name = "buffDis", required = false, dataType = "String", value = "缓冲距离"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
-            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为10")})
+            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
     @Cacheable
     public ApiResult bufferSearch(@RequestParam(value = "layerName", required = true) String layerName,
             @RequestParam(value = "filter", required = false) String filter,
@@ -101,7 +101,7 @@ public class SpatialDataQueryController {
             
             @RequestParam(value = "buffDis", required = false, defaultValue = "0") Integer buffDis,
             @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
-            @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit){
+            @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit){
     	ApiResult apiData=new ApiResult();
         QueryParameter param=new QueryParameter( layerName,  filter,  spatialFilter,  outFields,
     			 isReturnGeometry,  orderByFields,  buffDis,  current,  limit);
@@ -122,7 +122,7 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "outFields", required = false, dataType = "String", value = "查询返回的字段,例如：LXBM,LXMC"),
             @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
-            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为100")})
+            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
     @Cacheable
     public ApiResult getDataByNameOrCode(@RequestParam(value = "layerName", required = true) String layerName,
 								            @RequestParam(value = "where", required = false) String where,
@@ -132,7 +132,7 @@ public class SpatialDataQueryController {
 								            @RequestParam(value = "outFields", required = false) String outFields,
 								            @RequestParam(value = "orderByFields", required = false) String orderByFields,
 								            @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
-								            @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit){
+								            @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit){
     	  ApiResult apiData=new ApiResult();
           QueryParam param=new QueryParam( layerName,  cityLayerName,  cityname,  citycode,  where,
       			 outFields,  orderByFields,  current,  limit);

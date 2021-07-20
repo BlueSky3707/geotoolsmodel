@@ -39,10 +39,10 @@
 	<if test="orderByFields != null and orderByFields != ''">
 			 ${orderByFields}
 	</if>
-	<if test="limit != null">
+	<if test="limit != null and limit != -1">
 			 limit ${limit}
 	</if>
-	<if test="current != null and limit != null">
+	<if test="current != null and limit != null and limit != -1">
 			  OFFSET (${current}-1)*${limit}
 	</if>
   </select>
@@ -77,10 +77,10 @@
 	  <if test="orderByFields != null and orderByFields != ''">
 			 ${orderByFields}
 	  </if>
-	  <if test="limit != null">
+	  <if test="limit != null and limit != -1">
 			 limit ${limit}
 	  </if>
-	  <if test="current != null and limit != null">
+	  <if test="current != null and limit != null and limit != -1">
 			  OFFSET (${current}-1)*${limit}
 	  </if>
   </select>
@@ -105,10 +105,10 @@
 	<if test="orderByFields != null and orderByFields != ''">
 			 ${orderByFields}
 	</if>
-	<if test="limit != null">
+	<if test="limit != null and limit != -1">
 			 limit ${limit}
 	</if>
-	<if test="current != null and limit != null">
+	<if test="current != null and limit != null and limit != -1">
 			  OFFSET (${current}-1)*${limit}
 	</if>
   </select>

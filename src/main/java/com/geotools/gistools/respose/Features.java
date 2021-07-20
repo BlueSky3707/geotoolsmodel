@@ -34,7 +34,7 @@ public class Features implements Serializable {
     /**
      * 最大返回记录数
      */
-    private int maxRecordCount=1000;
+    private int maxRecordCount=100000;
     /**
      * 是否达到最大记录数
      */
