@@ -9,7 +9,7 @@ import com.geotools.gistools.exception.ExceptionMsg;
  * @Date: 2021/5/27 11:19
  */
 
-public class TileParam extends  ValidParameter{
+public class TileParam extends ValidParameter {
     public String layerName;
     public int row;
     public int col;
@@ -54,20 +54,20 @@ public class TileParam extends  ValidParameter{
         return false;
     }
 
-	public Integer getXcount() {
-		return xcount;
-	}
+    public Integer getXcount() {
+        return xcount;
+    }
 
-	public void setXcount(Integer xcount) {
-		this.xcount = xcount;
-	}
+    public void setXcount(Integer xcount) {
+        this.xcount = xcount;
+    }
 
-	public Integer getYcount() {
-		return ycount;
-	}
+    public Integer getYcount() {
+        return ycount;
+    }
 
-	public void setYcount(Integer ycount) {
-		this.ycount = ycount;
-	}
+    public void setYcount(Integer ycount) {
+        this.ycount = ycount;
+    }
 
 }

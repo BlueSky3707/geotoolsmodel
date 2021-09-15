@@ -10,70 +10,73 @@ import java.util.regex.Pattern;
 //import net.sf.json.JSONObject;
 
 public class Util {
-	/*静态单例模式*/
-	private Util(){}
-	private static class LazyHolder {
-	        private static final Util INSTANCE = new Util();
-	  }
-	public static final Util getInstance() {
-	        return LazyHolder.INSTANCE;
-	}
-	
+    /*静态单例模式*/
+    private Util() {
+    }
 
-	public static String getUUID() {
+    private static class LazyHolder {
+        private static final Util INSTANCE = new Util();
+    }
+
+    public static final Util getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+
+    public static String getUUID() {
         return UUID.randomUUID().toString().replace("-", "");
-	}
+    }
 
-	public String getGeometryToStr(Map geometry){
-		String str="";
-		String type = geometry.get("type").toString();
-		switch (type) {
-		case "point":
-			String x = geometry.get("x").toString();
-			String y = geometry.get("y").toString();
-			str="'POINT("+x+" "+y+")'";
-			break;
+    public String getGeometryToStr(Map geometry) {
+        String str = "";
+        String type = geometry.get("type").toString();
+        switch (type) {
+            case "point":
+                String x = geometry.get("x").toString();
+                String y = geometry.get("y").toString();
+                str = "'POINT(" + x + " " + y + ")'";
+                break;
 
-		case "polyline":
-			
-			String paths = geometry.get("paths").toString();
-			str="'MULTIPOLYGON(((%)))'";
-			break;
-		case "polygon":
-			String rings = geometry.get("rings").toString();
-			str="'MULTIPOLYGON((%s))'";
-			
-			str = str.replace("%s", this._changePolygonOrPolylineToJSonString(geometry, "rings"));
-			break;
-		}
-		return str;
-	}
-	
-	public String getStrToGeometry(Map geometry){
-		String str="";
-		String type = geometry.get("type").toString();
-		switch (type) {
-		case "point":
-			String x = geometry.get("x").toString();
-			String y = geometry.get("y").toString();
-			
-			break;
+            case "polyline":
 
-		case "polyline":
-			
-			String paths = geometry.get("paths").toString();
-			
-			break;
-		case "polygon":
-			String rings = geometry.get("rings").toString();
-			
-			break;
-		}
-		return str;
-	}
-	
-	public String _changePolygonOrPolylineToJSonString(Map geo,String key){
-		String[] arrs;
+                String paths = geometry.get("paths").toString();
+                str = "'MULTIPOLYGON(((%)))'";
+                break;
+            case "polygon":
+                String rings = geometry.get("rings").toString();
+                str = "'MULTIPOLYGON((%s))'";
+
+                str = str.replace("%s", this._changePolygonOrPolylineToJSonString(geometry, "rings"));
+                break;
+        }
+        return str;
+    }
+
+    public String getStrToGeometry(Map geometry) {
+        String str = "";
+        String type = geometry.get("type").toString();
+        switch (type) {
+            case "point":
+                String x = geometry.get("x").toString();
+                String y = geometry.get("y").toString();
+
+                break;
+
+            case "polyline":
+
+                String paths = geometry.get("paths").toString();
+
+                break;
+            case "polygon":
+                String rings = geometry.get("rings").toString();
+
+                break;
+        }
+        return str;
+    }
+
+    public String _changePolygonOrPolylineToJSonString(Map geo, String key) {
+        String[] arrs;
 //		(JSONObject) geo;
 //		for (String string : geo.get("key")) {
 //			
@@ -90,8 +93,8 @@ public class Util {
 //		if(arrs.length > 0){
 //			return arrs.join(",");
 //		}
-		return "";
+        return "";
     }
 
-	
+
 }

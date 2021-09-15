@@ -12,7 +12,7 @@ import java.util.Map;
  * @Author: jdy
  * @Date: 2021/5/17 15:11
  */
-public class QueryParam extends  ValidParameter {
+public class QueryParam extends ValidParameter {
     /**
      * 图层名称
      */
@@ -33,47 +33,50 @@ public class QueryParam extends  ValidParameter {
      * 属性过滤条件
      */
     protected String where;
-   
+
     /**
      * 返回字段
      */
     protected String outFields;
-    
+
     /**
      * 排序字段
      */
     protected String orderByFields;
- 
+
     /**
      * 分页信息
      */
-    protected Integer current ;
+    protected Integer current;
 
-    protected Integer limit ;
-    public QueryParam(){}
+    protected Integer limit;
 
-   
+    public QueryParam() {
+    }
+
+
     public QueryParam(String layerName, String cityLayerName, String cityname, String citycode, String where,
-			String outFields, String orderByFields, Integer current, Integer limit) {
-		super();
-		this.layerName = layerName;
-		this.cityLayerName = cityLayerName;
-		this.cityname = cityname;
-		this.citycode = citycode;
-		this.where = where;
-		this.outFields = outFields;
-		this.orderByFields = orderByFields;
-		this.current = current;
-		this.limit = limit;
-	}
+                      String outFields, String orderByFields, Integer current, Integer limit) {
+        super();
+        this.layerName = layerName;
+        this.cityLayerName = cityLayerName;
+        this.cityname = cityname;
+        this.citycode = citycode;
+        this.where = where;
+        this.outFields = outFields;
+        this.orderByFields = orderByFields;
+        this.current = current;
+        this.limit = limit;
+    }
 
 
-	@Override
+    @Override
     public boolean check() throws ExceptionMsg {
         ValidParameter.isBlank(this.layerName, "'layerName'参数不能为空!");
         ValidParameter.isBlank(this.cityLayerName, "'cityLayerName'参数不能为空!");
         return true;
     }
+
     public String getLayerName() {
         return layerName;
     }
@@ -82,7 +85,7 @@ public class QueryParam extends  ValidParameter {
         this.layerName = layerName;
     }
 
-    
+
     public String getOutFields() {
         return outFields;
     }
@@ -91,7 +94,6 @@ public class QueryParam extends  ValidParameter {
         this.outFields = outFields;
     }
 
-   
 
     public String getOrderByFields() {
         return orderByFields;
@@ -101,7 +103,7 @@ public class QueryParam extends  ValidParameter {
         this.orderByFields = orderByFields;
     }
 
-  
+
     public Integer getCurrent() {
         return current;
     }
@@ -118,44 +120,43 @@ public class QueryParam extends  ValidParameter {
         this.limit = limit;
     }
 
-	public String getWhere() {
-		return where;
-	}
+    public String getWhere() {
+        return where;
+    }
 
-	public void setWhere(String where) {
-		this.where = where;
-	}
-
-
-	public String getCityLayerName() {
-		return cityLayerName;
-	}
+    public void setWhere(String where) {
+        this.where = where;
+    }
 
 
-	public void setCityLayerName(String cityLayerName) {
-		this.cityLayerName = cityLayerName;
-	}
+    public String getCityLayerName() {
+        return cityLayerName;
+    }
 
 
-	public String getCityname() {
-		return cityname;
-	}
+    public void setCityLayerName(String cityLayerName) {
+        this.cityLayerName = cityLayerName;
+    }
 
 
-	public void setCityname(String cityname) {
-		this.cityname = cityname;
-	}
+    public String getCityname() {
+        return cityname;
+    }
 
 
-	public String getCitycode() {
-		return citycode;
-	}
+    public void setCityname(String cityname) {
+        this.cityname = cityname;
+    }
 
 
-	public void setCitycode(String citycode) {
-		this.citycode = citycode;
-	}
+    public String getCitycode() {
+        return citycode;
+    }
 
-	
-    
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+
 }

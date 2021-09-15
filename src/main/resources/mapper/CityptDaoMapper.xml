@@ -2,93 +2,92 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geotools.gistools.mapper.CityptDao">
 
-  <select id="selectList"  resultType="java.util.Map">
-    select name,citycode,st_asgeojson(geom) from city  
-  </select>
-  
-  <select id="selectList2" parameterType="com.geotools.gistools.request.QueryParam"  resultType="java.util.Map">
-    select 
-    <if test="isReturnGeometry=true">
-   		 st_asgeojson(geom) as geom,
-    </if>
-    <if test="outFields != null and outFields != ''">
-        ${outFields} 
-    </if>
-    from ${layerName} a
-    where 1=1
-    <if test="where != null">
-			and	( ${where} )
-	</if>
-	<if test="spatialRel==1 and geomwkt!=null">
-			and	ST_Disjoint(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="spatialRel==2 and geomwkt!=null">
-			and	ST_Intersects(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="spatialRel==3 and geomwkt!=null">
-			and	ST_Touches(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="spatialRel==4 and geomwkt!=null">
-			and	ST_Crosses(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="spatialRel==5 and geomwkt!=null">
-			and	ST_Within(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="spatialRel==6 and geomwkt!=null">
-			and	ST_Contains(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="spatialRel==7 and geomwkt!=null">
-			and	ST_Overlaps(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
-	</if>
-	<if test="orderByFields != null and orderByFields != ''">
-			order by ${orderByFields}
-	</if>
-  </select>
-  
-  
-  <select id="findList" parameterType="String" resultType="map">
-     select
-	 a.*,st_astext(a.${type}) as lastgeom
-	 from ${tables} a
-	 where ST_Intersects(a.${type}, ST_GeomFromText('${point}',4326)) = true  
-	 <if test="where != null">
-			and	( ${where} )
-	</if>
-	 ;
- </select>
-  <select id="getDistance" parameterType="String" resultType="map">
-    select st_distance(ST_GeomFromText('POINT(109.467031474 34.524323124)',4326)::geography,
-    ST_GeomFromText('POINT(109.012492169 32.681039469)',4326)::geography )
-    <!-- select st_astext(geom),st_area(geom::geography) from city -->
-    
- </select>
-  <select id="getArea" parameterType="String" resultType="map">
-  
-     select st_astext(geom),st_area(geom::geography) from city 
-    
- </select>
- 
- 
- 
- <select id="group"  resultType="String">
-		select * from table group by id
-		
+    <select id="selectList" resultType="java.util.Map">
+        select name,citycode,st_asgeojson(geom) from city
+    </select>
 
-	</select>
- 
- 
- 	<select id="findlist" parameterType="String" resultType="map">
-		select * from table where id= #{id}
-		
-
-	</select>
+    <select id="selectList2" parameterType="com.geotools.gistools.request.QueryParam" resultType="java.util.Map">
+        select
+        <if test="isReturnGeometry=true">
+            st_asgeojson(geom) as geom,
+        </if>
+        <if test="outFields != null and outFields != ''">
+            ${outFields}
+        </if>
+        from ${layerName} a
+        where 1=1
+        <if test="where != null">
+            and ( ${where} )
+        </if>
+        <if test="spatialRel==1 and geomwkt!=null">
+            and ST_Disjoint(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="spatialRel==2 and geomwkt!=null">
+            and ST_Intersects(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="spatialRel==3 and geomwkt!=null">
+            and ST_Touches(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="spatialRel==4 and geomwkt!=null">
+            and ST_Crosses(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="spatialRel==5 and geomwkt!=null">
+            and ST_Within(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="spatialRel==6 and geomwkt!=null">
+            and ST_Contains(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="spatialRel==7 and geomwkt!=null">
+            and ST_Overlaps(a.geom, ST_GeomFromText('${geomwkt}',4326)) = true
+        </if>
+        <if test="orderByFields != null and orderByFields != ''">
+            order by ${orderByFields}
+        </if>
+    </select>
 
 
-	<update id="update">
-		update table SET
-		id=#{id}
+    <select id="findList" parameterType="String" resultType="map">
+        select
+        a.*,st_astext(a.${type}) as lastgeom
+        from ${tables} a
+        where ST_Intersects(a.${type}, ST_GeomFromText('${point}',4326)) = true
+        <if test="where != null">
+            and ( ${where} )
+        </if>
+        ;
+    </select>
+    <select id="getDistance" parameterType="String" resultType="map">
+        select st_distance(ST_GeomFromText('POINT(109.467031474 34.524323124)',4326)::geography,
+        ST_GeomFromText('POINT(109.012492169 32.681039469)',4326)::geography )
+        <!-- select st_astext(geom),st_area(geom::geography) from city -->
 
-		where gid = #{gid}
-	</update>
- 
+    </select>
+    <select id="getArea" parameterType="String" resultType="map">
+
+        select st_astext(geom),st_area(geom::geography) from city
+
+    </select>
+
+
+    <select id="group" resultType="String">
+        select * from table group by id
+
+
+    </select>
+
+
+    <select id="findlist" parameterType="String" resultType="map">
+        select * from table where id= #{id}
+
+
+    </select>
+
+
+    <update id="update">
+        update table SET
+        id=#{id}
+
+        where gid = #{gid}
+    </update>
+
 </mapper>

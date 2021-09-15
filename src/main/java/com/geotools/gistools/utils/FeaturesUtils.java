@@ -17,22 +17,22 @@ import org.springframework.context.annotation.ScopeMetadata;
  */
 public class FeaturesUtils {
     private static final Logger logger = LoggerFactory.getLogger(FeaturesUtils.class);
-    public static Geometry chageGeoByValue(Geometry geo){
+
+    public static Geometry chageGeoByValue(Geometry geo) {
         if (geo == null) return null;
         org.locationtech.jts.geom.GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory(null);
         Geometry newGeo = null;
         if (geo instanceof com.vividsolutions.jts.geom.Point) {
 
-        }else if(geo instanceof com.vividsolutions.jts.geom.MultiPoint){
+        } else if (geo instanceof com.vividsolutions.jts.geom.MultiPoint) {
 
-        }else if(geo instanceof com.vividsolutions.jts.geom.LineString){
+        } else if (geo instanceof com.vividsolutions.jts.geom.LineString) {
 
-        }else if(geo instanceof  com.vividsolutions.jts.geom.MultiLineString){
+        } else if (geo instanceof com.vividsolutions.jts.geom.MultiLineString) {
 
-        }else if(geo instanceof com.vividsolutions.jts.geom.Polygon){
+        } else if (geo instanceof com.vividsolutions.jts.geom.Polygon) {
 
-        }
-        else if(geo instanceof com.vividsolutions.jts.geom.MultiPolygon){
+        } else if (geo instanceof com.vividsolutions.jts.geom.MultiPolygon) {
 
         }
 

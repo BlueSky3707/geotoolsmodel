@@ -16,12 +16,13 @@ public abstract class ValidParameter implements Serializable {
     public abstract boolean check() throws ExceptionMsg;
 
     public static void isNull(Object value, String message) throws ExceptionMsg {
-        if(value == null){
+        if (value == null) {
             throw new ExceptionMsg(message);
         }
     }
+
     public static void isBlank(String value, String message) throws ExceptionMsg {
-        if(!StringUtils.isBlank(value)){
+        if (!StringUtils.isBlank(value)) {
             throw new ExceptionMsg(message);
         }
     }

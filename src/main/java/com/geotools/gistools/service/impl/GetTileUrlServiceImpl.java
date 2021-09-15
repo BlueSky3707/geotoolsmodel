@@ -18,16 +18,18 @@ import java.io.UnsupportedEncodingException;
  */
 @Service
 public class GetTileUrlServiceImpl implements GetTileUrlService {
-    @Autowired(required=false)
+    @Autowired(required = false)
     private TileUtils tileUtils;
+
     @Override
     public byte[] getSimpleTileUrl(TileParam tileParam) throws IOException {
 
         return tileUtils.getTileData(tileParam);
     }
+
     @Override
     public byte[] getAggregationTile(TileParam tileParam) throws IOException {
-    	
-    	return tileUtils.getAggregationTile(tileParam);
+
+        return tileUtils.getAggregationTile(tileParam);
     }
 }

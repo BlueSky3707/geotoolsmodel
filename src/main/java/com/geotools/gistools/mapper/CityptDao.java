@@ -1,4 +1,5 @@
 package com.geotools.gistools.mapper;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +13,14 @@ import com.geotools.gistools.request.QueryParameter;
 @Repository
 @org.apache.ibatis.annotations.Mapper
 public interface CityptDao {
-	List<Map<String, Object>> selectList();
-	List<Map<String, Object>> selectList2(QueryParam queryParam);
-	
-	List<String> group();
-	List<Map<String, Object>> findlist(@Param("id") String id);
-	int update(@Param("gid") int gid,@Param("id") String id);
+    List<Map<String, Object>> selectList();
+
+    List<Map<String, Object>> selectList2(QueryParam queryParam);
+
+    List<String> group();
+
+    List<Map<String, Object>> findlist(@Param("id") String id);
+
+    int update(@Param("gid") int gid, @Param("id") String id);
 
 }

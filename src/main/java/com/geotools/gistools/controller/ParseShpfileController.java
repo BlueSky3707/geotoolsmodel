@@ -23,9 +23,10 @@ import java.util.Map;
  */
 @RestController()
 public class ParseShpfileController {
-   @Resource
+    @Resource
     ShpFileUtils shpFileUtils;
-    @RequestMapping(value = "/getShpInfo",method = RequestMethod.GET)
+
+    @RequestMapping(value = "/getShpInfo", method = RequestMethod.GET)
     public ApiResult getShpInfo() throws IOException, CQLException {
 
         shpFileUtils.shape2Geojson("D:\\ProjectWorkSpace\\hbt2\\data\\sxxzqh.shp");
@@ -43,5 +44,5 @@ public class ParseShpfileController {
 //        }
 //
         return null;
-   }
+    }
 }

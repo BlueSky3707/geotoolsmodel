@@ -1,4 +1,5 @@
 package com.geotools.gistools.utils;
+
 import org.geotools.data.*;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
@@ -38,51 +39,52 @@ import java.util.*;
 public class ShpFileUtils {
 
 
-   public void getFeatures() throws IOException {
-       String strShpPath = "D:\\ProjectWorkSpace\\hbt2\\data\\qxczd.shp";
-       File file = new File(strShpPath);
+    public void getFeatures() throws IOException {
+        String strShpPath = "D:\\ProjectWorkSpace\\hbt2\\data\\qxczd.shp";
+        File file = new File(strShpPath);
 
-       DataStoreFactorySpi factory = new ShapefileDataStoreFactory();
+        DataStoreFactorySpi factory = new ShapefileDataStoreFactory();
 
 
-       Map map = Collections.singletonMap( "url", file.toURL() );
+        Map map = Collections.singletonMap("url", file.toURL());
 
-       DataStore dataStore = factory.createDataStore(map);
+        DataStore dataStore = factory.createDataStore(map);
 
-       String typeName = dataStore.getTypeNames()[0];
+        String typeName = dataStore.getTypeNames()[0];
 
-       FeatureSource<SimpleFeatureType, SimpleFeature> source =
-               dataStore.getFeatureSource(typeName);
-       Filter filter = Filter.INCLUDE; // ECQL.toFilter("BBOX(THE_GEOM, 10,20,30,40)"
+        FeatureSource<SimpleFeatureType, SimpleFeature> source =
+                dataStore.getFeatureSource(typeName);
+        Filter filter = Filter.INCLUDE; // ECQL.toFilter("BBOX(THE_GEOM, 10,20,30,40)"
 
-       FeatureCollection<SimpleFeatureType, SimpleFeature> collection = source.getFeatures(filter);
-       try (FeatureIterator<SimpleFeature> features = collection.features()) {
-           while (features.hasNext()) {
-               SimpleFeature feature = features.next();
-               System.out.print(feature.getID());
-               System.out.print(": ");
-               System.out.println(feature.getDefaultGeometryProperty().getValue());
-           }
-       }
-   }
-    public  SimpleFeatureCollection  readShp(String path ) throws IOException, CQLException {
-        String filePath="D:\\ProjectWorkSpace\\hbt2\\data\\qxczd.shp";
-        SimpleFeatureSource  featureSource = readStoreByShp(filePath);
+        FeatureCollection<SimpleFeatureType, SimpleFeature> collection = source.getFeatures(filter);
+        try (FeatureIterator<SimpleFeature> features = collection.features()) {
+            while (features.hasNext()) {
+                SimpleFeature feature = features.next();
+                System.out.print(feature.getID());
+                System.out.print(": ");
+                System.out.println(feature.getDefaultGeometryProperty().getValue());
+            }
+        }
+    }
+
+    public SimpleFeatureCollection readShp(String path) throws IOException, CQLException {
+        String filePath = "D:\\ProjectWorkSpace\\hbt2\\data\\qxczd.shp";
+        SimpleFeatureSource featureSource = readStoreByShp(filePath);
         Filter filter = ECQL.toFilter("AREA_NAME = '宝鸡市'");
         //filter=null;
-                SimpleFeatureCollection collection = featureSource.getFeatures(filter);
-        if(featureSource == null) return null;
+        SimpleFeatureCollection collection = featureSource.getFeatures(filter);
+        if (featureSource == null) return null;
         try {
-            return filter != null ? featureSource.getFeatures(filter) : featureSource.getFeatures() ;
+            return filter != null ? featureSource.getFeatures(filter) : featureSource.getFeatures();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        return null ;
+        return null;
     }
 
-    public   SimpleFeatureSource readStoreByShp(String path ) throws IOException {
+    public SimpleFeatureSource readStoreByShp(String path) throws IOException {
         ShapefileDataStore shpDataStore = null;
         File file = new File(path);
         shpDataStore = new ShapefileDataStore(file.toURL());
@@ -90,13 +92,14 @@ public class ShpFileUtils {
         ((ShapefileDataStore) shpDataStore).setCharset(Charset.forName("GBK"));
         String typeName = shpDataStore.getTypeNames()[0];
         SimpleFeatureSource featureSource = null;
-        featureSource =  shpDataStore.getFeatureSource (typeName);
-        return featureSource ;
+        featureSource = shpDataStore.getFeatureSource(typeName);
+        return featureSource;
     }
-    public Object shape2Geojson(String shpPath){
+
+    public Object shape2Geojson(String shpPath) {
         FeatureJSON fjson = new FeatureJSON();
         StringBuffer sb = new StringBuffer();
-        try{
+        try {
             sb.append("{\"type\": \"FeatureCollection\",\"features\": ");
             File file = new File(shpPath);
             ShapefileDataStore shpDataStore = null;
@@ -106,12 +109,11 @@ public class ShpFileUtils {
             shpDataStore.setCharset(charset);
             String typeName = shpDataStore.getTypeNames()[0];
             SimpleFeatureSource featureSource = null;
-            featureSource =  shpDataStore.getFeatureSource (typeName);
+            featureSource = shpDataStore.getFeatureSource(typeName);
             SimpleFeatureCollection result = featureSource.getFeatures();
             SimpleFeatureIterator itertor = result.features();
             JSONArray array = new JSONArray();
-            while (itertor.hasNext())
-            {
+            while (itertor.hasNext()) {
                 SimpleFeature feature = itertor.next();
                 StringWriter writer = new StringWriter();
                 fjson.writeFeature(feature, writer);
@@ -123,8 +125,7 @@ public class ShpFileUtils {
             sb.append("}");
 
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
 
 
         }

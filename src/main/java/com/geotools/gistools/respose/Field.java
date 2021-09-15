@@ -9,24 +9,30 @@ import java.io.Serializable;
  * @Date: 2021/5/12 10:05
  */
 public class Field implements Serializable {
-    /** .字段标注*/
+    /**
+     * .字段标注
+     */
     private String label = "";
 
-    /** .字段名称*/
+    /**
+     * .字段名称
+     */
     private String name = "";
 
-    /** .字段类型*/
+    /**
+     * .字段类型
+     */
     private String type = "";
 
     public Field() {
     }
 
-    public Field(String name, String type){
+    public Field(String name, String type) {
         this.name = name;
         this.type = type;
     }
 
-    public Field(String name,String type,String label){
+    public Field(String name, String type, String label) {
         this.name = name;
         this.type = type;
         this.label = label;

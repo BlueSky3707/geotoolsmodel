@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
 /**
  * 功能描述：
  *
@@ -16,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController()
 public class LonlatController {
-    @RequestMapping(value = "/getLocation",method = RequestMethod.GET)
-    public ApiResult getWgsLocationByGao(){
+    @RequestMapping(value = "/getLocation", method = RequestMethod.GET)
+    public ApiResult getWgsLocationByGao() {
 
-        ApiResult api=new ApiResult();
+        ApiResult api = new ApiResult();
         api.setCode(200);
         api.setData("wwwww");
 
 
-        return  api;
+        return api;
     }
 }

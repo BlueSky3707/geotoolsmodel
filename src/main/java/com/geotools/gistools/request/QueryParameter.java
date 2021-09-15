@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Author: ddw
  * @Date: 2021/5/12 10:11
  */
-public class QueryParameter extends  ValidParameter {
+public class QueryParameter extends ValidParameter {
     /**
      * 图层名称
      */
@@ -31,7 +31,7 @@ public class QueryParameter extends  ValidParameter {
     /**
      * 是否返回空间信息
      */
-    protected boolean isReturnGeometry=true;
+    protected boolean isReturnGeometry = true;
     /**
      * 排序规则 例如：ORDER BY ID DESC,NAME
      */
@@ -48,10 +48,12 @@ public class QueryParameter extends  ValidParameter {
     /**
      * 分页信息
      */
-    protected Integer current ;
+    protected Integer current;
 
-    protected Integer limit ;
-    public QueryParameter(){}
+    protected Integer limit;
+
+    public QueryParameter() {
+    }
 
     public QueryParameter(String layerName, String filter, String spatialFilter, String outFields, Boolean isReturnGeometry, String orderByFields, String spatialRel, Integer current, Integer limit) {
         this.layerName = layerName;
@@ -63,27 +65,29 @@ public class QueryParameter extends  ValidParameter {
         this.spatialRel = spatialRel;
         this.current = current;
         this.limit = limit;
+
     }
 
     public QueryParameter(String layerName, String filter, String spatialFilter, String outFields,
-			boolean isReturnGeometry, String orderByFields, Integer buffDis, Integer current, Integer limit) {
-		super();
-		this.layerName = layerName;
-		this.filter = filter;
-		this.spatialFilter = spatialFilter;
-		this.outFields = outFields;
-		this.isReturnGeometry = isReturnGeometry;
-		this.orderByFields = orderByFields;
-		this.buffDis = buffDis;
-		this.current = current;
-		this.limit = limit;
-	}
+                          boolean isReturnGeometry, String orderByFields, Integer buffDis, Integer current, Integer limit) {
+        super();
+        this.layerName = layerName;
+        this.filter = filter;
+        this.spatialFilter = spatialFilter;
+        this.outFields = outFields;
+        this.isReturnGeometry = isReturnGeometry;
+        this.orderByFields = orderByFields;
+        this.buffDis = buffDis;
+        this.current = current;
+        this.limit = limit;
+    }
 
-	@Override
+    @Override
     public boolean check() throws ExceptionMsg {
         ValidParameter.isBlank(this.layerName, "'layerName'参数不能为空!");
         return true;
     }
+
     public String getLayerName() {
         return layerName;
     }
@@ -156,12 +160,12 @@ public class QueryParameter extends  ValidParameter {
         this.limit = limit;
     }
 
-	public Integer getBuffDis() {
-		return buffDis;
-	}
+    public Integer getBuffDis() {
+        return buffDis;
+    }
 
-	public void setBuffDis(Integer buffDis) {
-		this.buffDis = buffDis;
-	}
-    
+    public void setBuffDis(Integer buffDis) {
+        this.buffDis = buffDis;
+    }
+
 }

@@ -13,5 +13,6 @@ import java.io.UnsupportedEncodingException;
  */
 public interface GetTileUrlService {
     byte[] getSimpleTileUrl(TileParam tileParam) throws IOException;
+
     byte[] getAggregationTile(TileParam tileParam) throws IOException;
 }
