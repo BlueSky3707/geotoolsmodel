@@ -98,6 +98,7 @@ public class SpatialDataQueryController {
 
             } else {
                 pFeartrues = spatialDataQueryService.search(param);
+                apiData.setData(pFeartrues);
             }
             apiData.setCode(200);
             apiData.setSucceed(true);
