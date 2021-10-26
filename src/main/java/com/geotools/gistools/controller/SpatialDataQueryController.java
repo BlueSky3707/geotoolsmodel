@@ -1,8 +1,8 @@
 package com.geotools.gistools.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.geotools.gistools.beans.Redis;
 import com.geotools.gistools.exception.ExceptionMsg;
+import com.geotools.gistools.redisUtils.RedisServiceUtils;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
 import com.geotools.gistools.request.RoadAnalysisParam;
@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +51,8 @@ public class SpatialDataQueryController {
     private static final Logger logger = LoggerFactory.getLogger(SpatialDataQueryController.class);
     @Autowired
     private SpatialDataQueryService spatialDataQueryService;
+    @Resource
+    private RedisServiceUtils redisServiceUtils;
 
     @ApiOperation(value = "空间数据属性查询")
     @RequestMapping(value = "api/search", method = RequestMethod.GET, produces = "application/json")
@@ -59,26 +61,50 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
             @ApiImplicitParam(paramType = "query", name = "outFields", required = false, dataType = "String", value = "查询返回的字段,例如：LXBM,LXMC"),
             @ApiImplicitParam(paramType = "query", name = "isReturnGeometry", required = true, dataType = "Boolean", value = "是否返回空间数据"),
+            @ApiImplicitParam(paramType = "query", name = "isCache", required = true, dataType = "Boolean", defaultValue="false", value = "是否缓存结果"),
             @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
             @ApiImplicitParam(paramType = "query", name = "spatialRel", required = true, dataType = "String", allowableValues = "INTERSECTS,CONTAINS,DISJOINT,TOUCHES,CROSSES,WITHIN,OVERLAPS", value = "空间位置关系"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
             @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
-    // @Cacheable
+//    @Cacheable
     public ApiResult search(@RequestParam(value = "layerName", required = true) String layerName,
                             @RequestParam(value = "filter", required = false) String filter,
                             @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
                             @RequestParam(value = "outFields", required = false) String outFields,
                             @RequestParam(value = "isReturnGeometry", required = true) Boolean isReturnGeometry,
+                            @RequestParam(value = "isCache", required = false) Boolean isCache,
                             @RequestParam(value = "orderByFields", required = false) String orderByFields,
                             @RequestParam(value = "spatialRel", required = false) String spatialRel,
                             @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
                             @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit) throws RemoteException, ExceptionMsg {
-//        logger.info("空间数据属性查询调用接口开始=======图层名称:{},属性过滤条件:{},空间过滤条件:{},返回的字段:{},是否返回空间数据:{},排序条件:{},空间位置关系:{},页码:{},每页记录数:{}", layerName, filter, spatialFilter, outFields, isReturnGeometry, orderByFields, spatialRel, current, limit);
+//    logger.info("空间数据属性查询调用接口开始=======图层名称:{},属性过滤条件:{},空间过滤条件:{},返回的字段:{},是否返回空间数据:{},排序条件:{},空间位置关系:{},页码:{},每页记录数:{}", layerName, filter, spatialFilter, outFields, isReturnGeometry, orderByFields, spatialRel, current, limit);
         ApiResult apiData = new ApiResult();
-        QueryParameter param = new QueryParameter(layerName, filter, spatialFilter, outFields, isReturnGeometry, orderByFields, spatialRel, current, limit);
+        QueryParameter param = new QueryParameter(layerName, filter, spatialFilter, outFields, isReturnGeometry, isCache, orderByFields, spatialRel, current, limit);
+        Features pFeartrues = null;
+        try {
+            if (param.isCache()) {
+                if (!redisServiceUtils.exists(layerName)) {
+                    pFeartrues = spatialDataQueryService.search(param);
+                    apiData.setData(pFeartrues);
+                    Redis redis = new Redis();
+                    redis.setKey(layerName);
+                    redis.setValue(pFeartrues);
+                    redis.setSeconds(3600 * 24 * 1);
+                    redisServiceUtils.addForExpireTime(redis);
+                } else {
+                    Object featureObj = redisServiceUtils.get(layerName);
+                    apiData.setData(featureObj);
+                }
 
-        Features pFeartrues = spatialDataQueryService.search(param);
-        apiData.setData(pFeartrues);
+            } else {
+                pFeartrues = spatialDataQueryService.search(param);
+            }
+            apiData.setCode(200);
+            apiData.setSucceed(true);
+        } catch (Exception ex) {
+            apiData.setCode(400);
+            apiData.setSucceed(false);
+        }
         return apiData;
     }
 
@@ -100,13 +126,12 @@ public class SpatialDataQueryController {
                                   @RequestParam(value = "outFields", required = false) String outFields,
                                   @RequestParam(value = "isReturnGeometry", required = true) Boolean isReturnGeometry,
                                   @RequestParam(value = "orderByFields", required = false) String orderByFields,
-
                                   @RequestParam(value = "buffDis", required = false, defaultValue = "0") Integer buffDis,
                                   @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
                                   @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit) {
         ApiResult apiData = new ApiResult();
         QueryParameter param = new QueryParameter(layerName, filter, spatialFilter, outFields,
-                isReturnGeometry, orderByFields, buffDis, current, limit);
+                isReturnGeometry, false, orderByFields, buffDis, current, limit);
 
         Features pFeartrues = spatialDataQueryService.bufferSearch(param);
 
@@ -276,6 +301,7 @@ public class SpatialDataQueryController {
         }
         return items;
     }
+
     @ApiOperation(value = "路径分析")
     @RequestMapping(value = "roadAnaysis", method = RequestMethod.GET, produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "layerName", required = true, dataType = "String", value = "路径分析的线图层，必须是单线"),
@@ -283,15 +309,15 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "startY", required = true, dataType = "Double", value = "起点位置Y坐标"),
             @ApiImplicitParam(paramType = "query", name = "endX", required = true, dataType = "Double", value = "终点位置X坐标"),
             @ApiImplicitParam(paramType = "query", name = "endY", required = true, dataType = "Double", value = "终点位置Y坐标")
-            })
+    })
     @Cacheable
     public ApiResult roadAnaysis(@RequestParam(value = "layerName", required = true) String layerName,
                                  @RequestParam(value = "startX", required = true) Double startX,
                                  @RequestParam(value = "startY", required = true) Double startY,
                                  @RequestParam(value = "endX", required = true) Double endX,
-                                 @RequestParam(value = "endY", required = true) Double endY){
-        ApiResult apiData=new ApiResult();
-        RoadAnalysisParam roadAnalysisParam=new RoadAnalysisParam(layerName,startX,startY,endX,endY);
+                                 @RequestParam(value = "endY", required = true) Double endY) {
+        ApiResult apiData = new ApiResult();
+        RoadAnalysisParam roadAnalysisParam = new RoadAnalysisParam(layerName, startX, startY, endX, endY);
         Features pFeartrues = spatialDataQueryService.roadAnaysis(roadAnalysisParam);
         apiData.setData(pFeartrues);
         apiData.setCode(200);

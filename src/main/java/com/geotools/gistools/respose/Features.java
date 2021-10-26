@@ -97,10 +97,10 @@ Features implements Serializable {
         this.fields = fields;
     }
 
-    @Override
-    public String toString() {
-        return "Features [layerName=" + layerName + ", features=" + features + ", fields=" + fields + ", allCount="
-                + allCount + ", maxRecordCount=" + maxRecordCount + ", isMax=" + isMax + "]";
-    }
+//    @Override
+//    public String toString() {
+//        return "Features [layerName=" + layerName + ", features=" + features + ", fields=" + fields + ", allCount="
+//                + allCount + ", maxRecordCount=" + maxRecordCount + ", isMax=" + isMax + "]";
+//    }
 
 }

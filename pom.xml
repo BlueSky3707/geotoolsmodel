@@ -12,7 +12,7 @@
     <artifactId>gistools</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gistools</name>
+    <name>sxyjgistools</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -135,6 +135,11 @@
             <groupId>com.vividsolutions</groupId>
             <artifactId>jts</artifactId>
             <version>1.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
     </dependencies>

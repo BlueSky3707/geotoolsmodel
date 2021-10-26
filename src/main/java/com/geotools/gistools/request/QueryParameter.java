@@ -44,6 +44,10 @@ public class QueryParameter extends ValidParameter {
      * 缓冲距离
      */
     protected Integer buffDis;
+    /**
+     * 是否查询缓存结果
+     */
+    protected boolean isCache=false;
 
     /**
      * 分页信息
@@ -55,7 +59,7 @@ public class QueryParameter extends ValidParameter {
     public QueryParameter() {
     }
 
-    public QueryParameter(String layerName, String filter, String spatialFilter, String outFields, Boolean isReturnGeometry, String orderByFields, String spatialRel, Integer current, Integer limit) {
+    public QueryParameter(String layerName, String filter, String spatialFilter, String outFields, Boolean isReturnGeometry,Boolean isCache, String orderByFields, String spatialRel,Integer current, Integer limit) {
         this.layerName = layerName;
         this.filter = filter;
         this.spatialFilter = spatialFilter;
@@ -65,11 +69,12 @@ public class QueryParameter extends ValidParameter {
         this.spatialRel = spatialRel;
         this.current = current;
         this.limit = limit;
+        this.isCache=isCache;
 
     }
 
     public QueryParameter(String layerName, String filter, String spatialFilter, String outFields,
-                          boolean isReturnGeometry, String orderByFields, Integer buffDis, Integer current, Integer limit) {
+                          Boolean isReturnGeometry, Boolean isCache,String orderByFields, Integer buffDis, Integer current, Integer limit) {
         super();
         this.layerName = layerName;
         this.filter = filter;
@@ -78,8 +83,10 @@ public class QueryParameter extends ValidParameter {
         this.isReturnGeometry = isReturnGeometry;
         this.orderByFields = orderByFields;
         this.buffDis = buffDis;
+        this.isCache=isCache;
         this.current = current;
         this.limit = limit;
+
     }
 
     @Override
@@ -123,6 +130,8 @@ public class QueryParameter extends ValidParameter {
     public boolean isReturnGeometry() {
         return isReturnGeometry;
     }
+    public boolean isCache(){return isCache;}
+    public void  setCache(boolean iscache){isCache=iscache;}
 
     public void setReturnGeometry(boolean returnGeometry) {
         isReturnGeometry = returnGeometry;
