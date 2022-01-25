@@ -5,6 +5,7 @@ import com.geotools.gistools.exception.ExceptionMsg;
 import com.geotools.gistools.redisUtils.RedisServiceUtils;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
+import com.geotools.gistools.request.QueryTablesParameter;
 import com.geotools.gistools.request.RoadAnalysisParam;
 import com.geotools.gistools.respose.ApiResult;
 import com.geotools.gistools.respose.Features;
@@ -108,7 +109,39 @@ public class SpatialDataQueryController {
         }
         return apiData;
     }
+    @ApiOperation(value = "多表")
+    @RequestMapping(value = "searchByTables", method = RequestMethod.GET, produces = "application/json")
+   
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "tables", required = true, dataType = "String", value = "多个空间数据库中的图层名称"),
+            @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性过滤条件，语法请参考SQL，例如：LXBM='G45' AND SXXFX=1"),
+            @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
+            @ApiImplicitParam(paramType = "query", name = "outFields", required = true, dataType = "String", value = "必填固定字段,例如：LXBM,LXMC"),
+            @ApiImplicitParam(paramType = "query", name = "isReturnGeometry", required = true, dataType = "Boolean", value = "是否返回空间数据"),
+            @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
+            @ApiImplicitParam(paramType = "query", name = "buffDis", required = false, dataType = "String", value = "缓冲距离"),
+            @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
+            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
+    public ApiResult searchByTables(@RequestParam(value = "tables", required = true) String tables,
+                            @RequestParam(value = "filter", required = false) String filter,
+                            @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
+                            @RequestParam(value = "outFields", required = true) String outFields,
+                            @RequestParam(value = "isReturnGeometry", required = true) Boolean isReturnGeometry,
+                            @RequestParam(value = "orderByFields", required = false) String orderByFields,
+                            @RequestParam(value = "buffDis", required = false, defaultValue = "0") Integer buffDis,
+                            @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
+                            @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit) throws RemoteException, ExceptionMsg {
+    
+  
+        ApiResult apiData = new ApiResult();
+        String[] split = tables.split(",");
+        QueryTablesParameter param = new QueryTablesParameter(split, filter, spatialFilter, outFields,
+                isReturnGeometry, false, orderByFields, buffDis, current, limit);
 
+        Features pFeartrues = spatialDataQueryService.searchByTables(param);
+
+        apiData.setData(pFeartrues);
+        return apiData;
+    }
     @ApiOperation(value = "缓冲查询")
     @RequestMapping(value = "bufferSearch", method = RequestMethod.GET, produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "layerName", required = true, dataType = "String", value = "空间数据库中的图层名称"),
@@ -174,7 +207,10 @@ public class SpatialDataQueryController {
     /**
      * 批量新增
      *
-     * @param map {tablename:"test",list:[{name:"讨厌",descrape:"规划",geom:'POINT(109.28 37.75)'},{name:"讨厌22",descrape:"规划2",geom:'POINT(109.38 36.75)'}]
+     * @param map {tablename:"test",list:[
+     * {name:"讨厌",descrape:"规划",geom:'POINT(109.28 37.75)'},
+     * {name:"讨厌22",descrape:"规划2",geom:'POINT(109.38 36.75)'}]
+     * 
      * @return
      */
     @PostMapping("/insertData")
@@ -193,9 +229,10 @@ public class SpatialDataQueryController {
     /**
      * 批量更新
      *
-     * @param map{tablename:"test",list:[ {name:"讨厌00",descrape:"规划0",geom:'POINT(109.28 37.75)',wheres:{gid:20}},
-     *                                    {name:"讨厌0",descrape:"规划0",geom:'POINT(109.38 35.75)',wheres:{gid:21}}
-     *                                    ]}
+     * @param map{tablename:"test",
+     * list:[ {name:"讨厌00",descrape:"规划0",geom:'POINT(109.28 37.75)',wheres:{gid:20}},
+     *  {name:"讨厌0",descrape:"规划0",geom:'POINT(109.38 35.75)',wheres:{gid:21}}
+     *  ]}
      * @return
      */
     @PostMapping("/updateData")

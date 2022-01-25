@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
+import com.geotools.gistools.request.QueryTablesParameter;
 
 
 /**
@@ -22,8 +23,11 @@ import com.geotools.gistools.request.QueryParameter;
 @org.apache.ibatis.annotations.Mapper
 public interface CommonMapper {
     List<Map<String, Object>> search(QueryParameter queryParameter);
+    Integer searchCount(QueryParameter queryParameter);
 
     List<Map<String, Object>> bufferSearch(QueryParameter queryParameter);
+    
+    List<Map<String, Object>> searchByTables(QueryTablesParameter queryParameter);
 
     List<Map<String, Object>> getColumns(@Param("tablename") String tablename);
 

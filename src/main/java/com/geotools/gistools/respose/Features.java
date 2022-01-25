@@ -33,6 +33,10 @@ Features implements Serializable {
      */
     private int allCount = 0;
     /**
+     * 总记录条数
+     */
+    private int totalCount = 0;
+    /**
      * 最大返回记录数
      */
     private int maxRecordCount = 100000;
@@ -96,6 +100,14 @@ Features implements Serializable {
     public void setFields(List<Field> fields) {
         this.fields = fields;
     }
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
 
 //    @Override
 //    public String toString() {

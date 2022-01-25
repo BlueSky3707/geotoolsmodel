@@ -11,7 +11,7 @@
             ${outFields}
         </if>
         from ${layerName}
-        where 1=1
+        where 1=1 and geom NOTNULL and st_isvalid(geom)
         <if test="filter != null and filter != ''">
             and ( ${filter} )
         </if>
@@ -46,6 +46,7 @@
             OFFSET (${current}-1)*${limit}
         </if>
     </select>
+
     <!-- 查询表字段列表 -->
     <select id="getColumns" parameterType="String" resultType="java.util.Map">
         SELECT COLUMN_NAME,data_type FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME=#{tablename}
@@ -94,7 +95,7 @@
             ${outFields}
         </if>
         from ${layerName}
-        where 1=1
+        where 1=1 and geom NOTNULL and st_isvalid(geom)
         <if test="filter != null and filter != ''">
             and ( ${filter} )
         </if>
@@ -207,5 +208,84 @@
     </select>
     <select id="roadAnaysis" parameterType="com.geotools.gistools.request.RoadAnalysisParam" resultType="java.util.Map">
         select st_asgeojson(geom) as geom  from pgr_fromAtoB('${layerName}',${startX},${startY},${endX},${endY})
+    </select>
+    
+        <!-- 查询总数 -->
+    <select id="searchCount" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.lang.Integer">
+        select count(*) from ${layerName}
+        where 1=1 and geom NOTNULL and st_isvalid(geom)
+        <if test="filter != null and filter != ''">
+            and ( ${filter} )
+        </if>
+        <if test="spatialRel=='DISJOINT' and spatialFilter!=null">
+            and ST_Disjoint(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        <if test="spatialRel=='INTERSECTS' and spatialFilter!=null">
+            and ST_Intersects(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        <if test="spatialRel=='TOUCHES' and spatialFilter!=null">
+            and ST_Touches(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        <if test="spatialRel=='CROSSES' and spatialFilter!=null">
+            and ST_Crosses(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        <if test="spatialRel=='WITHIN' and spatialFilter!=null">
+            and ST_Within(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        <if test="spatialRel=='CONTAINS' and spatialFilter!=null">
+            and ST_Contains(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        <if test="spatialRel=='OVERLAPS' and spatialFilter!=null">
+            and ST_Overlaps(geom, ST_GeomFromText('${spatialFilter}',4326)) = true
+        </if>
+        
+    </select>
+    
+     <!-- 多表查询 -->
+    <select id="searchByTables" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.util.Map">
+        select  
+    			 "table"
+	        <if test="isReturnGeometry=true">
+	            ,st_asgeojson(geom) as geom
+	        </if>
+	         <if test="spatialFilter!=null and buffDis!=null">
+          	   , distance
+        	</if>
+	        <if test="outFields != null and outFields != ''">
+	            ,${outFields}
+	        </if>
+          from 
+        (
+          <foreach collection="tables" item="table" separator="UNION">
+               ( select 
+              	 #{table} as table
+                <if test="isReturnGeometry=true">
+		             ,geom
+		        </if>
+		         <if test="spatialFilter!=null and buffDis!=null">
+	          	   ,st_distance(geom::geography, ST_GeomFromText('${spatialFilter}',4326)::geography) as distance
+	        	</if>
+		        <if test="outFields != null and outFields != ''">
+		            ,${outFields}
+		        </if>
+				 FROM ${table})
+          </foreach>
+        ) tabs
+        where 1=1
+        <if test="filter != null and filter != ''">
+            and ( ${filter} )
+        </if>
+        <if test="spatialFilter!=null and buffDis!=null">
+            and ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
+        </if>
+        <if test="orderByFields != null and orderByFields != ''">
+            ${orderByFields}
+        </if>
+        <if test="limit != null and limit != -1">
+            limit ${limit}
+        </if>
+        <if test="current != null and limit != null and limit != -1">
+            OFFSET (${current}-1)*${limit}
+        </if>
     </select>
 </mapper>

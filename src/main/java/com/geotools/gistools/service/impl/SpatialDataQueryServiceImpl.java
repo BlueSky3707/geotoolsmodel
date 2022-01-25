@@ -5,6 +5,7 @@ import com.geotools.gistools.mapper.CommonMapper;
 import com.geotools.gistools.postgis.PostGisSearch;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
+import com.geotools.gistools.request.QueryTablesParameter;
 import com.geotools.gistools.request.RoadAnalysisParam;
 import com.geotools.gistools.respose.Features;
 import com.geotools.gistools.service.SpatialDataQueryService;
@@ -81,4 +82,10 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
     public Features roadAnaysis(RoadAnalysisParam roadAnalysisParam) {
         return postGisSearch.roadAnaysis(roadAnalysisParam);
     }
+
+	@Override
+	public Features searchByTables(QueryTablesParameter queryParameter) {
+		
+	  return postGisSearch.searchByTables(queryParameter);
+	}
 }
