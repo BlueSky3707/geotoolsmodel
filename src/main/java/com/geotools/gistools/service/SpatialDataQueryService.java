@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：
@@ -35,8 +36,9 @@ public interface SpatialDataQueryService {
 
     int deleteData(HashMap<String, Object> obj);
 
-    List<HashMap<String, Object>> getGroupData(String layername, String citytablename, String outFields, String type);
+    List<HashMap<String, Object>> getGroupData(String layername,String filter, String citytablename, String outFields, String type);
 
     String getCityNameByLatLng(String tablename, String cityname, String lng, String lat);
     Features roadAnaysis(RoadAnalysisParam roadAnalysisParam);
+    Map<String, Object> getMax(Map<String, Object> obj);
 }

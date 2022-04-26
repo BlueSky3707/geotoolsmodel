@@ -1,15 +1,19 @@
 server:
-  port: 8083
+  port: 8086
+  max-http-header-size: 102400 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 spring:
   datasource:
-    url: jdbc:postgresql://10.61.5.60:5432/sxyj_db
-    username: postgres
+    url: jdbc:postgresql://10.61.5.60:5432/sx_pwk
     password: hxhh
-    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://10.61.5.60:5432/sxyj_db
+#    password: hxhh
 #    url: jdbc:postgresql://localhost:5432/hxhh
 #    password: 1234
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+  
   redis:
     database: 0
     host: 127.0.0.1

@@ -40,6 +40,7 @@ public interface CommonMapper {
     int deleteData(HashMap<String, Object> obj);
 
     List<HashMap<String, Object>> getGroupData(@Param("layername") String layername,
+    										   @Param("filter") String filter,
                                                @Param("citytablename") String citytablename,
                                                @Param("outFields") String outFields,
                                                @Param("type") String type);
@@ -49,4 +50,5 @@ public interface CommonMapper {
                                @Param("lng") String lng,
                                @Param("lat") String lat);
     List<Map<String, Object>> roadAnaysis(RoadAnalysisParam roadAnalysisParam);
+    Map<String, Object> getMax(Map<String, Object> obj);
 }

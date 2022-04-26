@@ -59,7 +59,7 @@
         </if>
 
         from ${layerName}
-        where 1=1
+        where 1=1 and geom NOTNULL and st_isvalid(geom)
         <if test="(cityname != null and cityname != '') or (citycode != null and citycode != '')">
             and st_intersects(geom,
             (select t.geom from ${cityLayerName} t where 1=1
@@ -99,8 +99,18 @@
         <if test="filter != null and filter != ''">
             and ( ${filter} )
         </if>
-        <if test="spatialFilter!=null and buffDis!=null">
-            and ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
+        <if test="buffDis!=null">
+        	<if test="spatialFilter!=null">
+        	 and ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
+        	</if>
+        	<if test="selectTable!=null">
+	       		and ST_Intersects(geom, st_buffer((select st_simplify(geom,${tolerance}) from ${selectTable} where geom NOTNULL and st_isvalid(geom) 
+	       		<if test="selectTableFilter != null and selectTableFilter != ''">
+		            and ( ${selectTableFilter} ) 
+		        </if>
+		        LIMIT 1)::geography,${buffDis})) = true
+            </if>
+            
         </if>
 
         <if test="orderByFields != null and orderByFields != ''">
@@ -114,7 +124,7 @@
         </if>
     </select>
     <!--新增  -->
-    <insert id="insertData" parameterType="java.util.HashMap">
+    <insert id="insertData" parameterType="java.util.HashMap"  keyProperty="gid" keyColumn="gid" useGeneratedKeys="true">
         insert into ${tablename}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <foreach collection="items" item="item" separator=",">
@@ -131,6 +141,9 @@
                         <when test="item.name=='geom'">
                             ST_GeomFromText(#{item.value},4326)
                         </when>
+                           <when test="item.name=='ctime'">
+                           to_timestamp(#{item.value},'yyyy-MM-DD hh24:mi:ss')
+                        </when>
                         <otherwise>
                             #{item.value}
                         </otherwise>
@@ -140,22 +153,7 @@
         </trim>
     </insert>
 
-    <insert id="insertDataOracle" statementType="STATEMENT">
-        DECLARE
-        REALLYBIGTEXTSTRING CLOB :='${sqlData}';
-        begin
-        <choose>
-            <when test="sqlData !=null and sqlData != ''">
-                INSERT INTO ${layerName}(${layerfields})
-                VALUES(${layerValues},sde.st_geometry(REALLYBIGTEXTSTRING,4326));
-            </when>
-            <otherwise>
-                INSERT INTO ${layerName}(${layerfields}) VALUES(${layerValues});
-            </otherwise>
-        </choose>
-        end ;
 
-    </insert>
     <!-- 更新 -->
     <update id="updateData" parameterType="java.util.HashMap">
         update ${tablename}
@@ -166,6 +164,9 @@
                     <choose>
                         <when test="item.name=='geom'">
                             ST_GeomFromText(#{item.value},4326)
+                        </when>
+                           <when test="item.name=='ctime'">
+                           to_timestamp(#{item.value},'yyyy-MM-DD hh24:mi:ss')
                         </when>
                         <otherwise>
                             #{item.value}
@@ -197,7 +198,11 @@
             ${outFields},
         </if>
         st_asgeojson(st_centroid(t1.geom)) as geoJson,
-        (select ${type} from ${layername} t2 where st_intersects(t1.geom,t2.geom)=true) as count from ${citytablename}
+        (select ${type} from ${layername} t2 where st_intersects(t1.geom,t2.geom)=true
+        <if test="filter != null and filter != ''">
+            and ( ${filter} )
+        </if>
+        ) as count from ${citytablename}
         t1
         <!--  where t1.name=#{name} -->
     </select>
@@ -241,51 +246,7 @@
         
     </select>
     
-     <!-- 多表查询 -->
-    <select id="searchByTables" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.util.Map">
-        select  
-    			 "table"
-	        <if test="isReturnGeometry=true">
-	            ,st_asgeojson(geom) as geom
-	        </if>
-	         <if test="spatialFilter!=null and buffDis!=null">
-          	   , distance
-        	</if>
-	        <if test="outFields != null and outFields != ''">
-	            ,${outFields}
-	        </if>
-          from 
-        (
-          <foreach collection="tables" item="table" separator="UNION">
-               ( select 
-              	 #{table} as table
-                <if test="isReturnGeometry=true">
-		             ,geom
-		        </if>
-		         <if test="spatialFilter!=null and buffDis!=null">
-	          	   ,st_distance(geom::geography, ST_GeomFromText('${spatialFilter}',4326)::geography) as distance
-	        	</if>
-		        <if test="outFields != null and outFields != ''">
-		            ,${outFields}
-		        </if>
-				 FROM ${table})
-          </foreach>
-        ) tabs
-        where 1=1
-        <if test="filter != null and filter != ''">
-            and ( ${filter} )
-        </if>
-        <if test="spatialFilter!=null and buffDis!=null">
-            and ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
-        </if>
-        <if test="orderByFields != null and orderByFields != ''">
-            ${orderByFields}
-        </if>
-        <if test="limit != null and limit != -1">
-            limit ${limit}
-        </if>
-        <if test="current != null and limit != null and limit != -1">
-            OFFSET (${current}-1)*${limit}
-        </if>
-    </select>
+    <select id="getMax" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   		  select to_char(MAX(${field}),'YYYY-MM-DD hh24:mi:ss')   as max FROM ${tablename}   
+      </select>
 </mapper>

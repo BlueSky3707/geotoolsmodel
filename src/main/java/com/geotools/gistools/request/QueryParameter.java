@@ -45,6 +45,18 @@ public class QueryParameter extends ValidParameter {
      */
     protected Integer buffDis;
     /**
+     * 选择要缓冲的表的条件过滤
+     */
+    protected String selectTableFilter;
+    /**
+     * 选择要缓冲的表
+     */
+    protected String selectTable;
+    /**
+     * 选择要缓冲的表简化容差
+     */
+    protected float tolerance;
+    /**
      * 是否查询缓存结果
      */
     protected boolean isCache=false;
@@ -87,6 +99,25 @@ public class QueryParameter extends ValidParameter {
         this.current = current;
         this.limit = limit;
 
+    }
+    public QueryParameter(String layerName, String filter, String spatialFilter, String outFields,
+    		Boolean isReturnGeometry, Boolean isCache,String orderByFields, Integer buffDis, Integer current, Integer limit,
+    		String selectTable,String selectTableFilter,float tolerance) {
+    	super();
+    	this.layerName = layerName;
+    	this.filter = filter;
+    	this.spatialFilter = spatialFilter;
+    	this.outFields = outFields;
+    	this.isReturnGeometry = isReturnGeometry;
+    	this.orderByFields = orderByFields;
+    	this.buffDis = buffDis;
+    	this.isCache=isCache;
+    	this.current = current;
+    	this.limit = limit;
+    	this.selectTable = selectTable;
+    	this.selectTableFilter = selectTableFilter;
+    	this.tolerance = tolerance;
+    	
     }
 
     @Override
@@ -176,5 +207,29 @@ public class QueryParameter extends ValidParameter {
     public void setBuffDis(Integer buffDis) {
         this.buffDis = buffDis;
     }
+
+	public String getSelectTableFilter() {
+		return selectTableFilter;
+	}
+
+	public void setSelectTableFilter(String selectTableFilter) {
+		this.selectTableFilter = selectTableFilter;
+	}
+
+	public String getSelectTable() {
+		return selectTable;
+	}
+
+	public void setSelectTable(String selectTable) {
+		this.selectTable = selectTable;
+	}
+
+	public float getTolerance() {
+		return tolerance;
+	}
+
+	public void setTolerance(float tolerance) {
+		this.tolerance = tolerance;
+	}
 
 }

@@ -13,7 +13,10 @@ import com.geotools.gistools.service.SpatialDataQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,63 +112,37 @@ public class SpatialDataQueryController {
         }
         return apiData;
     }
-    @ApiOperation(value = "多表")
-    @RequestMapping(value = "searchByTables", method = RequestMethod.GET, produces = "application/json")
    
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "tables", required = true, dataType = "String", value = "多个空间数据库中的图层名称"),
-            @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性过滤条件，语法请参考SQL，例如：LXBM='G45' AND SXXFX=1"),
-            @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
-            @ApiImplicitParam(paramType = "query", name = "outFields", required = true, dataType = "String", value = "必填固定字段,例如：LXBM,LXMC"),
-            @ApiImplicitParam(paramType = "query", name = "isReturnGeometry", required = true, dataType = "Boolean", value = "是否返回空间数据"),
-            @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
-            @ApiImplicitParam(paramType = "query", name = "buffDis", required = false, dataType = "String", value = "缓冲距离"),
-            @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
-            @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
-    public ApiResult searchByTables(@RequestParam(value = "tables", required = true) String tables,
-                            @RequestParam(value = "filter", required = false) String filter,
-                            @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
-                            @RequestParam(value = "outFields", required = true) String outFields,
-                            @RequestParam(value = "isReturnGeometry", required = true) Boolean isReturnGeometry,
-                            @RequestParam(value = "orderByFields", required = false) String orderByFields,
-                            @RequestParam(value = "buffDis", required = false, defaultValue = "0") Integer buffDis,
-                            @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
-                            @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit) throws RemoteException, ExceptionMsg {
-    
-  
-        ApiResult apiData = new ApiResult();
-        String[] split = tables.split(",");
-        QueryTablesParameter param = new QueryTablesParameter(split, filter, spatialFilter, outFields,
-                isReturnGeometry, false, orderByFields, buffDis, current, limit);
-
-        Features pFeartrues = spatialDataQueryService.searchByTables(param);
-
-        apiData.setData(pFeartrues);
-        return apiData;
-    }
     @ApiOperation(value = "缓冲查询")
     @RequestMapping(value = "bufferSearch", method = RequestMethod.GET, produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "layerName", required = true, dataType = "String", value = "空间数据库中的图层名称"),
             @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性过滤条件，语法请参考SQL，例如：LXBM='G45' AND SXXFX=1"),
-            @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
+            @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT,不可与selectTable同时使用"),
+            @ApiImplicitParam(paramType = "query", name = "selectTable", required = false, dataType = "String", value = "要缓冲数据所在表名，不可与spatialFilter同时使用"),
+            @ApiImplicitParam(paramType = "query", name = "selectTableFilter", required = false, dataType = "String", value = "要缓冲数据所在表的过滤条件，例如：LXBM='G45' AND SXXFX=1"),
+            @ApiImplicitParam(paramType = "query", name = "tolerance", required = false, dataType = "tolerance", value = "要缓冲数据所在表的简化容差，例如：0.02"),
             @ApiImplicitParam(paramType = "query", name = "outFields", required = false, dataType = "String", value = "查询返回的字段,例如：LXBM,LXMC"),
             @ApiImplicitParam(paramType = "query", name = "isReturnGeometry", required = true, dataType = "Boolean", value = "是否返回空间数据"),
             @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
             @ApiImplicitParam(paramType = "query", name = "buffDis", required = false, dataType = "String", value = "缓冲距离"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
             @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
-    @Cacheable
+//    @Cacheable
     public ApiResult bufferSearch(@RequestParam(value = "layerName", required = true) String layerName,
                                   @RequestParam(value = "filter", required = false) String filter,
                                   @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
+                                  @RequestParam(value = "selectTable", required = false) String selectTable,
+                                  @RequestParam(value = "selectTableFilter", required = false) String selectTableFilter,
+                                  @RequestParam(value = "tolerance", required = false,defaultValue = "0.0") float tolerance,
                                   @RequestParam(value = "outFields", required = false) String outFields,
                                   @RequestParam(value = "isReturnGeometry", required = true) Boolean isReturnGeometry,
                                   @RequestParam(value = "orderByFields", required = false) String orderByFields,
                                   @RequestParam(value = "buffDis", required = false, defaultValue = "0") Integer buffDis,
                                   @RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
-                                  @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit) {
+                                  @RequestParam(value = "limit", required = false, defaultValue = "-1") Integer limit ) {
         ApiResult apiData = new ApiResult();
         QueryParameter param = new QueryParameter(layerName, filter, spatialFilter, outFields,
-                isReturnGeometry, false, orderByFields, buffDis, current, limit);
+                isReturnGeometry, false, orderByFields, buffDis, current, limit,selectTable,selectTableFilter,tolerance);
 
         Features pFeartrues = spatialDataQueryService.bufferSearch(param);
 
@@ -184,7 +161,7 @@ public class SpatialDataQueryController {
             @ApiImplicitParam(paramType = "query", name = "orderByFields", required = false, dataType = "String", value = "排序条件，语法参考SQL，例如：ORDER BY NAME DESC"),
             @ApiImplicitParam(paramType = "query", name = "current", required = false, dataType = "String", value = "分页参数，第几页，不传此参数默认不分页，开始页数为1"),
             @ApiImplicitParam(paramType = "query", name = "limit", required = false, dataType = "String", value = "每页记录数，此参数可选，默认为全部")})
-    @Cacheable
+//    @Cacheable
     public ApiResult getDataByNameOrCode(@RequestParam(value = "layerName", required = true) String layerName,
                                          @RequestParam(value = "where", required = false) String where,
                                          @RequestParam(value = "cityLayerName", required = false) String cityLayerName,
@@ -208,22 +185,36 @@ public class SpatialDataQueryController {
      * 批量新增
      *
      * @param map {tablename:"test",list:[
-     * {name:"讨厌",descrape:"规划",geom:'POINT(109.28 37.75)'},
-     * {name:"讨厌22",descrape:"规划2",geom:'POINT(109.38 36.75)'}]
+     * {name:"",descrape:"规划",geom:'POINT(109.28 37.75)'}]
      * 
      * @return
      */
+    @ApiOperation(value = "批量新增记录")
     @PostMapping("/insertData")
     @ResponseBody
     @CrossOrigin
-    int insertData(@RequestBody HashMap<String, Object> map) {
-
+    ApiResult insertData( @RequestBody HashMap<String, Object> map) {
+    	ApiResult apiData = new ApiResult();
+    	Map<String, Object> resultmap = new HashMap<String, Object>(); 
+    	List<Integer> ids = new ArrayList<Integer>();
         List<HashMap<String, Object>> objs = getData(map, 0);
         int num = 0;
-        for (HashMap<String, Object> obj : objs) {
-            num += spatialDataQueryService.insertData(obj);
-        }
-        return num;
+        try {
+			for (HashMap<String, Object> obj : objs) {
+			    num += spatialDataQueryService.insertData(obj);
+			    ids.add(Integer.parseInt(obj.get("gid").toString()));
+			}
+			resultmap.put("count", num);
+			resultmap.put("ids", ids);
+			apiData.setData(resultmap);
+			return apiData;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			apiData.setData(e);
+			apiData.setCode(400);
+			return apiData;
+		}
     }
 
     /**
@@ -235,17 +226,27 @@ public class SpatialDataQueryController {
      *  ]}
      * @return
      */
+    @ApiOperation(value = "批量更新")
     @PostMapping("/updateData")
     @ResponseBody
     @CrossOrigin
-    int updateData(@RequestBody HashMap<String, Object> map) {
-
+    ApiResult updateData(@RequestBody HashMap<String, Object> map) {
+    	ApiResult apiData = new ApiResult();
         List<HashMap<String, Object>> objs = getData(map, 1);
         int num = 0;
-        for (HashMap<String, Object> obj : objs) {
-            num += spatialDataQueryService.updateData(obj);
-        }
-        return num;
+        try {
+			for (HashMap<String, Object> obj : objs) {
+			    num += spatialDataQueryService.updateData(obj);
+			}
+			apiData.setData(num);
+			return apiData;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			apiData.setData(e);
+			apiData.setCode(400);
+			return apiData;
+		}
     }
 
     /**
@@ -254,11 +255,23 @@ public class SpatialDataQueryController {
      * @param obj 例：{tablename:"test",filedid:"gid", list:[2,6]}
      * @return
      */
+    @ApiOperation(value = "批量删除")
     @PostMapping("/deleteData")
     @ResponseBody
     @CrossOrigin
-    int deleteData(@RequestBody HashMap<String, Object> obj) {
-        return spatialDataQueryService.deleteData(obj);
+    ApiResult deleteData(@RequestBody HashMap<String, Object> obj) {
+    	ApiResult apiData = new ApiResult();
+    	try {
+			int deleteData = spatialDataQueryService.deleteData(obj);
+			apiData.setData(deleteData);
+			return apiData;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			apiData.setData(e);
+			apiData.setCode(400);
+			return apiData;
+		}
     }
 
     /**
@@ -270,18 +283,25 @@ public class SpatialDataQueryController {
      * @param "type统计格式数量"count(*)",求和"sum(length)",平均"avg(length)"
      * @return
      */
-    @GetMapping("/getGroupData")
-    @ResponseBody
-    @CrossOrigin
-    List<HashMap<String, Object>> getGroupData(
+    @ApiOperation(value = "城市数据统计")
+    @RequestMapping(value = "getGroupData", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParams({
+    	    @ApiImplicitParam(paramType = "query", name = "layername", required = true, dataType = "String", value = "空间数据库中的图层名称"),
+            @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性过滤条件，语法请参考SQL，例如：LXBM='G45' AND SXXFX=1"),
+            @ApiImplicitParam(paramType = "query", name = "citytablename", required = false, dataType = "String", value = "城市表，例如：sx_citygh"),
+            @ApiImplicitParam(paramType = "query", name = "type", required = false, dataType = "String", value = "统计格式，例如：数量count(*),求和sum(length),平均avg(length)"),
+            @ApiImplicitParam(paramType = "query", name = "outFields", required = false, dataType = "String", value = "城市表字段例如：cityname") })
+    @Cacheable
+    ApiResult getGroupData(
             @RequestParam(value = "layername", required = true) String layername,
+            @RequestParam(value = "filter", required = false) String filter,
             @RequestParam(value = "citytablename", required = true) String citytablename,
-            @RequestParam(value = "outFields", required = true) String outFields,
-            @RequestParam(value = "type", required = true) String type) {
-
-        List<HashMap<String, Object>> groupData = spatialDataQueryService.getGroupData(layername, citytablename, outFields, type);
-
-        return groupData;
+            @RequestParam(value = "type", required = true) String type,
+            @RequestParam(value = "outFields", required = false) String outFields) {
+    	ApiResult apiData = new ApiResult();
+        List<HashMap<String, Object>> groupData = spatialDataQueryService.getGroupData(layername,filter, citytablename, outFields, type);
+        apiData.setData(groupData);
+        return apiData;
     }
 
     @ApiOperation(value = "通过经纬度获取所在城市名称")
@@ -360,5 +380,23 @@ public class SpatialDataQueryController {
         apiData.setData(pFeartrues);
         apiData.setCode(200);
         return apiData;
+    }
+    
+    @ApiOperation(value = "获取最大时间，用于生态一张图sx_hbt中")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "tablename", required = true, dataType = "String", value = "表名"),
+        @ApiImplicitParam(paramType = "query", name = "field", required = true, dataType = "Double", value = "时间戳（timestamp）字段名"),
+    	})
+    @GetMapping("/getMax")
+    @ResponseBody
+    @CrossOrigin
+    ApiResult getMax( @RequestParam(value = "tablename", required = true) String tablename,
+            @RequestParam(value = "field", required = true) String field) {
+    	ApiResult apiData = new ApiResult();
+    	Map<String, Object> obj = new HashMap<String, Object>(); 
+    	obj.put("tablename", tablename);
+    	obj.put("field", field);
+    	apiData.setData(spatialDataQueryService.getMax(obj));
+        return  apiData;
     }
 }

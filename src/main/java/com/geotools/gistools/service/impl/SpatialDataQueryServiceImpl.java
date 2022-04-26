@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：
@@ -67,9 +68,9 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
     }
 
     @Override
-    public List<HashMap<String, Object>> getGroupData(String layername, String citytable, String outFields, String type) {
+    public List<HashMap<String, Object>> getGroupData(String layername,String filter, String citytable, String outFields, String type) {
 
-        return commonMapper.getGroupData(layername, citytable, outFields, type);
+        return commonMapper.getGroupData(layername,filter, citytable, outFields, type);
     }
 
     @Override
@@ -87,5 +88,11 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
 	public Features searchByTables(QueryTablesParameter queryParameter) {
 		
 	  return postGisSearch.searchByTables(queryParameter);
+	}
+	@Override
+	public Map<String, Object> getMax(Map<String, Object> obj) {
+		// TODO Auto-generated method stub
+		return commonMapper.getMax(obj);
+		
 	}
 }
