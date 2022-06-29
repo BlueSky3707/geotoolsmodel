@@ -1,19 +1,12 @@
 package com.geotools.gistools.postgis;
-
-import com.geotools.gistools.mapper.CityptDao;
 import com.geotools.gistools.mapper.CommonMapper;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
-import com.geotools.gistools.request.QueryTablesParameter;
+
 import com.geotools.gistools.request.RoadAnalysisParam;
 import com.geotools.gistools.respose.CallbackAbleFeature;
 import com.geotools.gistools.respose.Features;
 import com.geotools.gistools.respose.Field;
-import com.geotools.gistools.utils.WktAndGeom;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,39 +114,7 @@ public class PostGisSearch {
      * @param lists
      */
    
-	private void creatTablesFeatures(QueryTablesParameter queryParameter, Features featuresSet, List<Field> fields,
-    		List<Map<String, Object>> lists) {
-    	List<CallbackAbleFeature> features = new ArrayList<CallbackAbleFeature>();
-    	List<Map<String, Object>> columns = commonMapper.getColumns(queryParameter.getTables()[0]);
-    	
-    	addFields(queryParameter.getOutFields(), fields, columns);//生成fields
-    	fields.add(new Field("table", "string", "table"));
-    	if((queryParameter.getSpatialFilter()== null || queryParameter.getSpatialFilter().equals(""))&&(queryParameter.getBuffDis()== null || queryParameter.getBuffDis().equals(""))) {
-    		fields.add(new Field("distance", "double", "distance"));
-    	}
-    	for (Map<String, Object> map : lists) {
-    		CallbackAbleFeature callbackAbleFeature = new CallbackAbleFeature();
-    		if (queryParameter.isReturnGeometry()&&map.get("geom")!=null) {
-    			String wkt = map.get("geom").toString();
-    			callbackAbleFeature.setGeoJson(wkt);
-    			
-    			
-    		}
-    		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-    		
-    		for (Field field : fields) {
-    			hashMap.put(field.getName(), map.get(field.getName()));
-    		}
-    		
-    		callbackAbleFeature.setAttributes(hashMap);
-    		features.add(callbackAbleFeature);
-    		
-    	}
-    	featuresSet.setAllCount(lists.size());
-    	featuresSet.setLayerName(queryParameter.getTables().toString());
-    	featuresSet.setFeatures(features);
-    	featuresSet.setFields(fields);
-    }
+
 
     /**
      * 按行政区名称或代码查询
@@ -265,18 +226,6 @@ public class PostGisSearch {
         }
         return pFeatrues;
     }
-    //多表查询
-    public Features searchByTables(QueryTablesParameter queryParameter){
-    	Features featuresSet=new Features();
-    	 String outFields = queryParameter.getOutFields();
-         List<Field> fields = new ArrayList<Field>();
-         if (outFields == null || outFields.equals("") || outFields.equals("*")) {//不传参默认全部
-             queryParameter.setOutFields("*");
-         }
-         List<Map<String, Object>> lists = commonMapper.searchByTables(queryParameter);
 
-        creatTablesFeatures(queryParameter, featuresSet, fields, lists);
-    	return featuresSet;
-    }
     
 }

@@ -3,7 +3,7 @@ package com.geotools.gistools.service;
 import com.geotools.gistools.exception.ExceptionMsg;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
-import com.geotools.gistools.request.QueryTablesParameter;
+
 import com.geotools.gistools.request.RoadAnalysisParam;
 import com.geotools.gistools.respose.Features;
 
@@ -28,7 +28,7 @@ public interface SpatialDataQueryService {
 
     Features bufferSearch(QueryParameter queryParameter);
     
-    Features searchByTables(QueryTablesParameter queryParameter);
+
 
     int insertData(HashMap<String, Object> obj);
 

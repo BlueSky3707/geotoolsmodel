@@ -5,7 +5,7 @@ import com.geotools.gistools.exception.ExceptionMsg;
 import com.geotools.gistools.redisUtils.RedisServiceUtils;
 import com.geotools.gistools.request.QueryParam;
 import com.geotools.gistools.request.QueryParameter;
-import com.geotools.gistools.request.QueryTablesParameter;
+
 import com.geotools.gistools.request.RoadAnalysisParam;
 import com.geotools.gistools.respose.ApiResult;
 import com.geotools.gistools.respose.Features;
