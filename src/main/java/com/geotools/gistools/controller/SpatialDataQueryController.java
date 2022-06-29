@@ -381,7 +381,21 @@ public class SpatialDataQueryController {
         apiData.setCode(200);
         return apiData;
     }
-    
+//    天地扯人电子围栏获取日志信息
+    @GetMapping("/getWllogAndBi")
+    @ResponseBody
+    @CrossOrigin
+    Map<String, Object> getWllogAndBi(
+            @RequestParam(value = "kssj", required = true) String kssj,
+            @RequestParam(value = "jssj", required = true) String jssj,
+            @RequestParam(value = "fid", required = true) Integer fid) {
+    	Map<String, Object> resultmap = new HashMap<String, Object>(); 
+        List<HashMap<String, Object>> groupData = spatialDataQueryService.getWllogAndBi(kssj, jssj,  fid);
+        Integer wllogCount = spatialDataQueryService.getWllogCount(fid);
+        resultmap.put("data", groupData);
+        resultmap.put("count", wllogCount);
+        return resultmap;
+    }
     @ApiOperation(value = "获取最大时间，用于生态一张图sx_hbt中")
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "tablename", required = true, dataType = "String", value = "表名"),

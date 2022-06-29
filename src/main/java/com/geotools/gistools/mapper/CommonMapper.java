@@ -50,5 +50,9 @@ public interface CommonMapper {
                                @Param("lng") String lng,
                                @Param("lat") String lat);
     List<Map<String, Object>> roadAnaysis(RoadAnalysisParam roadAnalysisParam);
+    List<HashMap<String, Object>> getWllogAndBi(@Param("kssj") String kssj,
+            @Param("jssj") String jssj,
+            @Param("fid") Integer fid);
+    Integer getWllogCount(@Param("fid") Integer fid);
     Map<String, Object> getMax(Map<String, Object> obj);
 }

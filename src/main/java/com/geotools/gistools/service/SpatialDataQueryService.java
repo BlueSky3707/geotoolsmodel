@@ -40,5 +40,7 @@ public interface SpatialDataQueryService {
 
     String getCityNameByLatLng(String tablename, String cityname, String lng, String lat);
     Features roadAnaysis(RoadAnalysisParam roadAnalysisParam);
+    List<HashMap<String, Object>> getWllogAndBi(String kssj,String jssj, Integer fid);
+    Integer getWllogCount(Integer fid);
     Map<String, Object> getMax(Map<String, Object> obj);
 }

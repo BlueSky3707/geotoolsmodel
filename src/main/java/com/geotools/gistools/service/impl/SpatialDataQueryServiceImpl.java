@@ -90,6 +90,17 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
 	  return postGisSearch.searchByTables(queryParameter);
 	}
 	@Override
+	public List<HashMap<String, Object>> getWllogAndBi(String kssj, String jssj, Integer fid) {
+		
+		return  commonMapper.getWllogAndBi( kssj, jssj,  fid);
+	}
+
+	@Override
+	public Integer getWllogCount(Integer fid) {
+		// TODO Auto-generated method stub
+		return commonMapper.getWllogCount(fid);
+	}
+	@Override
 	public Map<String, Object> getMax(Map<String, Object> obj) {
 		// TODO Auto-generated method stub
 		return commonMapper.getMax(obj);

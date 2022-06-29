@@ -4,14 +4,17 @@
     <!-- 查询 -->
     <select id="search" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.util.Map">
         select
-        <if test="isReturnGeometry=true">
+        <if test="isReturnGeometry==true">
             st_asgeojson(geom) as geom,
         </if>
         <if test="outFields != null and outFields != ''">
             ${outFields}
         </if>
         from ${layerName}
-        where 1=1 and geom NOTNULL and st_isvalid(geom)
+        where 1=1  <!-- and st_isvalid(geom) -->
+         <if test="isReturnGeometry==true">
+            and geom NOTNULL
+        </if>
         <if test="filter != null and filter != ''">
             and ( ${filter} )
         </if>
@@ -59,7 +62,7 @@
         </if>
 
         from ${layerName}
-        where 1=1 and geom NOTNULL and st_isvalid(geom)
+        where 1=1 and geom NOTNULL <!-- and st_isvalid(geom) -->
         <if test="(cityname != null and cityname != '') or (citycode != null and citycode != '')">
             and st_intersects(geom,
             (select t.geom from ${cityLayerName} t where 1=1
@@ -88,7 +91,7 @@
     <!--缓冲分析  -->
     <select id="bufferSearch" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.util.Map">
         select
-        <if test="isReturnGeometry=true">
+        <if test="isReturnGeometry==true">
             st_asgeojson(geom) as geom,
         </if>
         <if test="outFields != null and outFields != ''">
@@ -104,7 +107,7 @@
         	 and ST_Intersects(geom, st_buffer(ST_GeomFromText('${spatialFilter}',4326)::geography,${buffDis})) = true
         	</if>
         	<if test="selectTable!=null">
-	       		and ST_Intersects(geom, st_buffer((select st_simplify(geom,${tolerance}) from ${selectTable} where geom NOTNULL and st_isvalid(geom) 
+	       		and ST_Intersects(geom, st_buffer((select st_simplify(geom,${tolerance}) from ${selectTable} where geom NOTNULL <!-- and st_isvalid(geom) --> 
 	       		<if test="selectTableFilter != null and selectTableFilter != ''">
 		            and ( ${selectTableFilter} ) 
 		        </if>
@@ -218,7 +221,10 @@
         <!-- 查询总数 -->
     <select id="searchCount" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.lang.Integer">
         select count(*) from ${layerName}
-        where 1=1 and geom NOTNULL and st_isvalid(geom)
+        where 1=1  <!-- and st_isvalid(geom) -->
+         <if test="isReturnGeometry==true">
+            and geom NOTNULL
+        </if>
         <if test="filter != null and filter != ''">
             and ( ${filter} )
         </if>
@@ -245,7 +251,15 @@
         </if>
         
     </select>
-    
+     <select id="getWllogAndBi" parameterType="java.lang.String" resultType="java.util.Map">
+     select *,to_date(wlzxjssj, 'YYYY-MM-DD') &lt;= to_date('${kssj}', 'YYYY-MM-DD') as kbj,to_date(wlzxjssj, 'YYYY-MM-DD') &lt; to_date('${jssj}', 'YYYY-MM-DD') as jbj
+      FROM ( select * FROM sx_dzwl_log WHERE fid=${fid}  ORDER BY to_date(wlzxkssj, 'YYYY-MM-DD') DESC,to_date(wlzxjssj, 'YYYY-MM-DD') DESC LIMIT 1 ) as t  WHERE 
+        to_date(wlzxjssj, 'YYYY-MM-DD') &lt;= to_date('${kssj}', 'YYYY-MM-DD') or to_date(wlzxjssj, 'YYYY-MM-DD') &lt; to_date('${jssj}', 'YYYY-MM-DD')
+     </select>
+      <select id="getWllogCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+   		  select count(*) FROM sx_dzwl_log WHERE fid=${fid}  
+        
+     </select>
     <select id="getMax" parameterType="java.util.HashMap" resultType="java.util.HashMap">
    		  select to_char(MAX(${field}),'YYYY-MM-DD hh24:mi:ss')   as max FROM ${tablename}   
       </select>
