@@ -110,6 +110,7 @@ public class ShpFileUtils {
             String typeName = shpDataStore.getTypeNames()[0];
             SimpleFeatureSource featureSource = null;
             featureSource = shpDataStore.getFeatureSource(typeName);
+
             SimpleFeatureCollection result = featureSource.getFeatures();
             SimpleFeatureIterator itertor = result.features();
             JSONArray array = new JSONArray();
