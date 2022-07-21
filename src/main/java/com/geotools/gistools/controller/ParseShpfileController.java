@@ -35,10 +35,10 @@ public class ParseShpfileController {
     @Value("${shp.citypath}")
      String citypath ;
     @RequestMapping(value = "/getShpInfo", method = RequestMethod.GET)
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "fileName", required = true, dataType = "String", value = "空间数据文件路径"),
-            @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性条件过滤"),
-            @ApiImplicitParam(paramType = "query", name = "selCity", required = false, dataType = "String", value = "通过地市名称获取几何体过滤"),
-            @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "fileName", required = true, dataType = "String", value = "空间数据文件路径,例:D:\\gisdata\\gp\\sx.shp"),
+            @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性条件过滤,例:type=0"),
+            @ApiImplicitParam(paramType = "query", name = "selCity", required = false, dataType = "String", value = "通过地市名称获取几何体过滤,例:name='西安市'"),
+            @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT，例:MULTIPOLYGON (((108 34,108 35,109 35,108 34)))"),
             @ApiImplicitParam(paramType = "query", name = "spatialRel", required = false, dataType = "String", allowableValues = "INTERSECTS,CONTAINS,DISJOINT,CROSSES", value = "空间位置关系"),
            })
     public ApiResult getShpInfo(@RequestParam(value = "fileName", required = true) String fileName,
