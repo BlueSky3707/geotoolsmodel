@@ -2,32 +2,22 @@ package com.geotools.gistools.utils;
 
 import org.geotools.data.*;
 import org.geotools.data.shapefile.ShapefileDataStore;
-import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.feature.FeatureCollection;
-import org.geotools.feature.FeatureIterator;
+import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
-import org.geotools.geojson.feature.FeatureJSON;
-
-
+import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
 import org.springframework.stereotype.Component;
-import top.jfunc.json.impl.JSONArray;
-import top.jfunc.json.impl.JSONObject;
-
-import java.io.StringWriter;
-
+import com.geotools.gistools.request.ShpQueryParam;
 import java.nio.charset.Charset;
 import java.io.File;
 import java.io.IOException;
-
 import java.util.*;
-
 
 /**
  * 功能描述：
@@ -39,98 +29,116 @@ import java.util.*;
 public class ShpFileUtils {
 
 
-    public void getFeatures() throws IOException {
-        String strShpPath = "D:\\ProjectWorkSpace\\hbt2\\data\\qxczd.shp";
-        File file = new File(strShpPath);
+	public void setFilters(ShpQueryParam shpQueryParam, List<Filter> filters) {
+		try {
+			// 属性过滤
+			if (shpQueryParam.getFilter() != null) {
+				Filter filter = ECQL.toFilter(shpQueryParam.getFilter());
+				filters.add(filter);
+			}
+		// 空间过滤
+			// 地市过滤
+			if (shpQueryParam.getCityFileName() != null && shpQueryParam.getSelCity() != null) {
+				List<Filter> filterscity = new ArrayList<>();
+				Filter filtercity = ECQL.toFilter(shpQueryParam.getSelCity());
+				filterscity.add(filtercity);
+				SimpleFeatureCollection resultcity = readStoreByShp(shpQueryParam.getCityFileName(), filterscity);
 
-        DataStoreFactorySpi factory = new ShapefileDataStoreFactory();
+				SimpleFeatureIterator cityIterator = resultcity.features();
+				String wkt = null;
+				while (cityIterator.hasNext()) {
+					SimpleFeature next = cityIterator.next();
+					wkt = next.getDefaultGeometryProperty().getValue().toString();
+				}
+				if(wkt!=null&&!wkt.equals("")) {
+					Filter filter = ECQL.toFilter("INTERSECTS(the_geom," + wkt + ")");
+					filters.add(filter);
+				}
+				
+			//SpatialRel wkt过滤
+			} else if (shpQueryParam.getSpatialFilter() != null && shpQueryParam.getSpatialRel() != null) {
+				Filter gfilter = null;
+				if (shpQueryParam.getSpatialRel().equals("INTERSECTS")) {
+					gfilter = ECQL.toFilter("INTERSECTS(the_geom," + shpQueryParam.getSpatialFilter() + ")");
+				} else if (shpQueryParam.getSpatialRel().equals("CONTAINS")) {
+					gfilter = ECQL.toFilter("CONTAINS(the_geom," + shpQueryParam.getSpatialFilter() + ")");
+				} else if (shpQueryParam.getSpatialRel().equals("DISJOINT")) {
+					gfilter = ECQL.toFilter("DISJOINT(the_geom," + shpQueryParam.getSpatialFilter() + ")");
+				} else if (shpQueryParam.getSpatialRel().equals("CROSSES")) {
+					gfilter = ECQL.toFilter("CROSSES(the_geom," + shpQueryParam.getSpatialFilter() + ")");
+				}
+				filters.add(gfilter);
 
+			}
+		} catch (CQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchElementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-        Map map = Collections.singletonMap("url", file.toURL());
+	public SimpleFeatureCollection readStoreByShp(String path, List<Filter> filters) throws IOException {
+		ShapefileDataStore shpDataStore = null;
+		File file = new File(path);
+		shpDataStore = new ShapefileDataStore(file.toURL());
+		// 设置编码
+		Charset charset = Charset.forName("GBK");
+		shpDataStore.setCharset(charset);
+		String typeName = shpDataStore.getTypeNames()[0];
+		SimpleFeatureSource featureSource = null;
+		featureSource = shpDataStore.getFeatureSource(typeName);
+		Query query = new Query();
+		FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+		query.setFilter(ff.and(filters));
+		SimpleFeatureCollection result = featureSource.getFeatures(query);
+		shpDataStore.dispose();// 使用之后必须关掉
+		return result;
+	}
 
-        DataStore dataStore = factory.createDataStore(map);
+	public List<Map<String, Object>> shape2Geojson(ShpQueryParam shpQueryParam) {
 
-        String typeName = dataStore.getTypeNames()[0];
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		try {
+			if (shpQueryParam.getFileName() != null && !shpQueryParam.getFileName().equals("")) {
 
-        FeatureSource<SimpleFeatureType, SimpleFeature> source =
-                dataStore.getFeatureSource(typeName);
-        Filter filter = Filter.INCLUDE; // ECQL.toFilter("BBOX(THE_GEOM, 10,20,30,40)"
+				List<Filter> filters = new ArrayList<>();
+//				设置过滤条件
+				setFilters(shpQueryParam, filters);
+				SimpleFeatureCollection result = readStoreByShp(shpQueryParam.getFileName(), filters);
+				SimpleFeatureIterator itertor = result.features();
+				while (itertor.hasNext()) {
+					SimpleFeature feature = itertor.next();
 
-        FeatureCollection<SimpleFeatureType, SimpleFeature> collection = source.getFeatures(filter);
-        try (FeatureIterator<SimpleFeature> features = collection.features()) {
-            while (features.hasNext()) {
-                SimpleFeature feature = features.next();
-                System.out.print(feature.getID());
-                System.out.print(": ");
-                System.out.println(feature.getDefaultGeometryProperty().getValue());
-            }
-        }
-    }
+					Collection<Property> properties = feature.getProperties();
+					Object defaultGeometry = feature.getDefaultGeometry();
+					Map<String, Object> map = new HashMap<String, Object>();
+					if (defaultGeometry != null) {
+						map.put("geometry", feature.getDefaultGeometryProperty().getValue().toString());
+					} else {
+						map.put("geometry", "");
+					}
+					for (Property property : properties) {
+						String name = property.getName().toString();
+						if (name != null && !name.equals("the_geom")) {
+							map.put(property.getName().toString().toLowerCase(), property.getValue());
+						}
+					}
 
-    public SimpleFeatureCollection readShp(String path) throws IOException, CQLException {
-        String filePath = "D:\\ProjectWorkSpace\\hbt2\\data\\qxczd.shp";
-        SimpleFeatureSource featureSource = readStoreByShp(filePath);
-        Filter filter = ECQL.toFilter("AREA_NAME = '宝鸡市'");
-        //filter=null;
-        SimpleFeatureCollection collection = featureSource.getFeatures(filter);
-        if (featureSource == null) return null;
-        try {
-            return filter != null ? featureSource.getFeatures(filter) : featureSource.getFeatures();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+					list.add(map);
+				}
+				itertor.close();
+			}
+		} catch (Exception e) {
 
-        return null;
-    }
+			return null;
+		}
 
-    public SimpleFeatureSource readStoreByShp(String path) throws IOException {
-        ShapefileDataStore shpDataStore = null;
-        File file = new File(path);
-        shpDataStore = new ShapefileDataStore(file.toURL());
-        //设置字符编码
-        ((ShapefileDataStore) shpDataStore).setCharset(Charset.forName("GBK"));
-        String typeName = shpDataStore.getTypeNames()[0];
-        SimpleFeatureSource featureSource = null;
-        featureSource = shpDataStore.getFeatureSource(typeName);
-        return featureSource;
-    }
+		return list;
+	}
 
-    public Object shape2Geojson(String shpPath) {
-        FeatureJSON fjson = new FeatureJSON();
-        StringBuffer sb = new StringBuffer();
-        try {
-            sb.append("{\"type\": \"FeatureCollection\",\"features\": ");
-            File file = new File(shpPath);
-            ShapefileDataStore shpDataStore = null;
-            shpDataStore = new ShapefileDataStore(file.toURL());
-            //设置编码
-            Charset charset = Charset.forName("GBK");
-            shpDataStore.setCharset(charset);
-            String typeName = shpDataStore.getTypeNames()[0];
-            SimpleFeatureSource featureSource = null;
-            featureSource = shpDataStore.getFeatureSource(typeName);
-
-            SimpleFeatureCollection result = featureSource.getFeatures();
-            SimpleFeatureIterator itertor = result.features();
-            JSONArray array = new JSONArray();
-            while (itertor.hasNext()) {
-                SimpleFeature feature = itertor.next();
-                StringWriter writer = new StringWriter();
-                fjson.writeFeature(feature, writer);
-                JSONObject json = new JSONObject(writer.toString());
-                array.put(json);
-            }
-            itertor.close();
-            sb.append(array.toString());
-            sb.append("}");
-
-
-        } catch (Exception e) {
-
-
-        }
-        System.out.println(sb);
-        return sb;
-    }
 }

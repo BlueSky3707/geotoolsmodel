@@ -1,13 +1,13 @@
 server:
-  port: 8086
+  port: 8084
   max-http-header-size: 102400 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 spring:
   datasource:
-    url: jdbc:postgresql://10.61.5.60:5432/sx_pwk
+#    url: jdbc:postgresql://10.61.5.60:5432/sx_pwk
     password: hxhh
-#    url: jdbc:postgresql://10.61.5.60:5432/sxyj_db
+    url: jdbc:postgresql://10.61.5.84:5432/sx_hky
 #    password: hxhh
 #    url: jdbc:postgresql://localhost:5432/hxhh
 #    password: 1234
@@ -31,3 +31,5 @@ logging:
   level:
     #    com.geotools.gistools.mapper: trace
     com.geotools.gistools.mapper: DEBUG
+zdy: 
+   citypath: D:\gisdata\gp\mian.shp
