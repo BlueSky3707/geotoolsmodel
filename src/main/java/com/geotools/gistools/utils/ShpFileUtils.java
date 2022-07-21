@@ -98,9 +98,8 @@ public class ShpFileUtils {
 
     public Object shape2Geojson(String shpPath) {
         FeatureJSON fjson = new FeatureJSON();
-        StringBuffer sb = new StringBuffer();
+        List<String> list=new ArrayList<String>();
         try {
-            sb.append("{\"type\": \"FeatureCollection\",\"features\": ");
             File file = new File(shpPath);
             ShapefileDataStore shpDataStore = null;
             shpDataStore = new ShapefileDataStore(file.toURL());
@@ -110,27 +109,26 @@ public class ShpFileUtils {
             String typeName = shpDataStore.getTypeNames()[0];
             SimpleFeatureSource featureSource = null;
             featureSource = shpDataStore.getFeatureSource(typeName);
-
             SimpleFeatureCollection result = featureSource.getFeatures();
             SimpleFeatureIterator itertor = result.features();
+
+
+            FeatureCollection<SimpleFeatureType, SimpleFeature> resultq = featureSource.getFeatures();
+            Integer ee= resultq.size();
             JSONArray array = new JSONArray();
+            SimpleFeature feature=null;
             while (itertor.hasNext()) {
-                SimpleFeature feature = itertor.next();
+                feature = itertor.next();
                 StringWriter writer = new StringWriter();
                 fjson.writeFeature(feature, writer);
                 JSONObject json = new JSONObject(writer.toString());
-                array.put(json);
+                list.add(json.toString());
             }
             itertor.close();
-            sb.append(array.toString());
-            sb.append("}");
-
-
         } catch (Exception e) {
 
 
         }
-        System.out.println(sb);
-        return sb;
+        return list;
     }
 }

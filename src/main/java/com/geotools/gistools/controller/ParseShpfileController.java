@@ -30,20 +30,20 @@ public class ParseShpfileController {
     ShpFileUtils shpFileUtils;
 
     @RequestMapping(value = "/getShpInfo", method = RequestMethod.GET)
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "fileName", required = true, dataType = "String", value = "空间数据文件路径"),
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "fileName", required = false, dataType = "String", value = "空间数据文件路径"),
             @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性条件过滤"),
             @ApiImplicitParam(paramType = "query", name = "selCity", required = false, dataType = "String", value = "通过地市名称获取几何体过滤"),
             @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT"),
             @ApiImplicitParam(paramType = "query", name = "spatialRel", required = false, dataType = "String", allowableValues = "INTERSECTS,CONTAINS,DISJOINT,TOUCHES,CROSSES,WITHIN,OVERLAPS", value = "空间位置关系"),
            })
-    public ApiResult getShpInfo(@RequestParam(value = "fileName", required = true) String fileName,
+    public ApiResult getShpInfo(@RequestParam(value = "fileName", required = false) String fileName,
                                 @RequestParam(value = "filter", required = false) String filter,
                                 @RequestParam(value = "selCity", required = false) String selCity,
                                 @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
                                 @RequestParam(value = "spatialRel", required = false) String spatialRel
     ) throws IOException, CQLException {
 
-        Object datas=shpFileUtils.shape2Geojson("D:\\dev\\shanxi1.shp");
+        Object datas=shpFileUtils.shape2Geojson("D:\\dev\\sxclip.shp");
         //shpFileUtils.getFeatures();
 //        SimpleFeatureCollection smple=shpFileUtils.readShp("");
 //        SimpleFeatureIterator iterator = smple.features();
@@ -59,7 +59,6 @@ public class ParseShpfileController {
 //
         ApiResult api = new ApiResult();
         api.setCode(200);
-        System.out.println(datas);
         api.setData(datas);
         return api;
     }
