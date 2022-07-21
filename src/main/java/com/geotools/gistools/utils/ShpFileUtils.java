@@ -12,6 +12,7 @@ import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.geotools.gistools.request.ShpQueryParam;
 import java.nio.charset.Charset;
@@ -27,7 +28,8 @@ import java.util.*;
  */
 @Component
 public class ShpFileUtils {
-
+	@Value("${shp.code}")
+    String code ;
 
 	public void setFilters(ShpQueryParam shpQueryParam, List<Filter> filters) {
 		try {
@@ -87,8 +89,13 @@ public class ShpFileUtils {
 		File file = new File(path);
 		shpDataStore = new ShapefileDataStore(file.toURL());
 		// 设置编码
-		Charset charset = Charset.forName("GBK");
-		shpDataStore.setCharset(charset);
+		if(code.equals("GBK")) {
+			Charset charset = Charset.forName("GBK");
+			shpDataStore.setCharset(charset);
+		}else {
+			Charset charset = Charset.forName("UTF-8");
+			shpDataStore.setCharset(charset);
+		}
 		String typeName = shpDataStore.getTypeNames()[0];
 		SimpleFeatureSource featureSource = null;
 		featureSource = shpDataStore.getFeatureSource(typeName);
@@ -135,7 +142,7 @@ public class ShpFileUtils {
 			}
 		} catch (Exception e) {
 
-			return null;
+			return list;
 		}
 
 		return list;

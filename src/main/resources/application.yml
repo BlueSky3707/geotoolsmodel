@@ -31,5 +31,7 @@ logging:
   level:
     #    com.geotools.gistools.mapper: trace
     com.geotools.gistools.mapper: DEBUG
-zdy: 
+    
+shp: 
    citypath: D:\gisdata\gp\mian.shp
+   code: GBK
