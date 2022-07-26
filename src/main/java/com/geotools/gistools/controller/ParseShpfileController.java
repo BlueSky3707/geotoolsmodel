@@ -34,8 +34,10 @@ public class ParseShpfileController {
     ShpFileUtils shpFileUtils;
     @Value("${shp.citypath}")
      String citypath ;
+    @Value("${shp.shppath}")
+    String shppath ;
     @RequestMapping(value = "/getShpInfo", method = RequestMethod.GET)
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "fileName", required = true, dataType = "String", value = "空间数据文件路径,例:D:\\gisdata\\gp\\sx.shp"),
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "fileName", required = true, dataType = "String", value = "空间数据文件路径,例:gp\\sx.shp"),
             @ApiImplicitParam(paramType = "query", name = "filter", required = false, dataType = "String", value = "属性条件过滤,例:type=0"),
             @ApiImplicitParam(paramType = "query", name = "selCity", required = false, dataType = "String", value = "通过地市名称获取几何体过滤,例:name='西安市'"),
             @ApiImplicitParam(paramType = "query", name = "spatialFilter", required = false, dataType = "String", value = "空间过滤条件，标准的WKT，例:MULTIPOLYGON (((108 34,108 35,109 35,108 34)))"),
@@ -47,8 +49,8 @@ public class ParseShpfileController {
                                 @RequestParam(value = "spatialFilter", required = false) String spatialFilter,
                                 @RequestParam(value = "spatialRel", required = false) String spatialRel
     ) throws IOException {
-    
-        ShpQueryParam shpQueryParam = new ShpQueryParam(fileName, citypath, selCity, filter, spatialFilter, spatialRel);
+    	
+        ShpQueryParam shpQueryParam = new ShpQueryParam(shppath+"\\"+fileName+".shp", citypath, selCity, filter, spatialFilter, spatialRel);
         List< Map<String, Object>> datas=shpFileUtils.shape2Geojson(shpQueryParam);
         ApiResult api = new ApiResult();
         api.setCode(200);
