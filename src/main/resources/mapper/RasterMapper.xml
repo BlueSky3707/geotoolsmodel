@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.geotools.gistools.mapper.RasterMappper">
-<insert id="insertRater" parameterType="java.util.List">
+<insert id="insertRater" parameterType="java.util.HashMap">
     insert into sx_raster(rastertype,rastername,ratertime,rmax,rmin,mean,stddev) values
-   <foreach collection="list" item="it" separator=",">
-       (#{it.rastertype},#{it.rastername},#{it.ratertime},#{it.mean},#{it.stddev})
-   </foreach>
+  
+     (#{rastertype},#{rastername},#{ratertime},#{rmax},#{rmin},#{mean},#{stddev})
+  
 </insert>
-    <select id="getMaxtime" parameterType="java.lang.String">
-        select max(${fieldMax}) as pValue from sx_raster
+    <select id="getMaxtime" parameterType="java.lang.String"  resultType="java.lang.String">
+        select max(${fieldMax}) from sx_raster where rastertype=#{rastertype}
     </select>
-
+    <select id="getMaxRmax" parameterType="java.lang.String"  resultType="java.lang.Double">
+       select MAX(rmax) from sx_raster where ratertime &gt; #{starttime} AND ratertime &lt; #{endtime} and rastertype=#{rastertype}
+    </select>
+    <select id="getMaxRmaxToName" parameterType="java.lang.String"  resultType="java.lang.String>
+       select rastername from sx_raster where ratertime &gt; #{starttime} AND ratertime &lt; #{endtime} and rastertype=#{rastertype}  AND rmax=#{max}
+    </select>
 </mapper>

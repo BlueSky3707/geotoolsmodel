@@ -1,5 +1,6 @@
 package com.geotools.gistools.controller;
 
+import com.geotools.gistools.mapper.RasterMappper;
 import com.geotools.gistools.request.ShpQueryParam;
 import com.geotools.gistools.respose.ApiResult;
 import com.geotools.gistools.utils.ShpFileUtils;
@@ -44,6 +45,8 @@ import org.gdal.gdalconst.gdalconst;
 public class ParseShpfileController {
     @Resource
     ShpFileUtils shpFileUtils;
+    @Resource
+	RasterMappper rasterMapper;
     @Value("${shp.citypath}")
      String citypath ;
     @Value("${shp.shppath}")
@@ -71,11 +74,29 @@ public class ParseShpfileController {
         api.setData(map);
         return api;
     }
+    @RequestMapping(value = "/getMaxRmaxToName", method = RequestMethod.GET)
+    @ApiImplicitParams({
+    	@ApiImplicitParam(paramType = "query", name = "starttime", required = false, dataType = "String", value = "开始时间，格式：20220701"),
+    	@ApiImplicitParam(paramType = "query", name = "endtime", required = false, dataType = "String", value = "结束时间，格式：20220731"),
+    	@ApiImplicitParam(paramType = "query", name = "spatialRel", required = true, dataType = "String", allowableValues = "CO,NO2,HCHO,O3,PM25,SO2,CHOCHO", value = "空间位置关系"),
+    })
+    public ApiResult getMaxRmaxToName(@RequestParam(value = "starttime", required = false) String starttime,
+    		@RequestParam(value = "endtime", required = false) String endtime,
+    		
+    		@RequestParam(value = "rastertype", required = true) String rastertype
+    		) throws IOException {
+    	
+    	ApiResult api = new ApiResult();
+    	api.setCode(200);
+    	
+    	
+    	api.setData(null);
+    	return api;
+    }
     /*
     主要是针对环保厅水平台，计算大气相关的影像产品的最大值、最小值、均值、方差等
     * */
-    @Value("${ratser}")
-    String rasterPath;
+
     @RequestMapping(value = "/calculateRaster", method = RequestMethod.GET)
     public ApiResult calculateRaster(){
         gdal.AllRegister();

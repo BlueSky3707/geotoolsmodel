@@ -1,9 +1,11 @@
 package com.geotools.gistools.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：
@@ -14,7 +16,16 @@ import java.util.List;
 @Repository
 @org.apache.ibatis.annotations.Mapper
 public interface RasterMappper {
-    int insertRater(List<Object> pRaster);
-    double getMaxtime(String fieldMax);
+	int insertRater(Map<String, Object> obj);
 
+	String getMaxtime(@Param("fieldMax") String fieldMax, @Param("rastertype") String rastertype);
+
+	double getMaxRmax(@Param("starttime") String starttime, 
+			@Param("endtime") String endtime,
+			@Param("rastertype") String rastertype);
+
+	String getMaxRmaxToName(@Param("starttime") String starttime, 
+			@Param("endtime") String endtime,
+			@Param("rastertype") String rastertype,
+			@Param("max") double max);
 }

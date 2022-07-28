@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableCaching
+@EnableScheduling 
 @MapperScan("com.geotools.gistools.dao")
 @SpringBootApplication(exclude = SolrAutoConfiguration.class)
 //@SpringBootApplication(exclude=DataSourceAutoConfiguration.class)

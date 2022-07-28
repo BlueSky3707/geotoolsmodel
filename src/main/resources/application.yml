@@ -7,7 +7,7 @@ spring:
   datasource:
 #    url: jdbc:postgresql://10.61.5.60:5432/sx_pwk
     password: hxhh
-    url: jdbc:postgresql://10.61.5.84:5432/sx_hky
+    url: jdbc:postgresql://10.61.5.60:5432/sx_hbt
 #    password: hxhh
 #    url: jdbc:postgresql://localhost:5432/hxhh
 #    password: 1234
@@ -37,12 +37,12 @@ shp:
    citypath: D:\gisdata\gp\city.shp #D:\project\city.shp
    code: GBK
 ratser:
-  CO: D:\hbt\daily\CO
-  HCHO: D:\hbt\daily\HCHO
-  NO2: D:\hbt\daily\NO2
-  O3: D:\hbt\daily\O3
-  PM25: D:\hbt\daily\PM25
-  CHOCHO: D:\hbt\weekly\CHOCHO
-  SO2: D:\hbt\weekly\SO2
+  CO: D:\gisdata\gp\daily\CO
+  HCHO: D:\gisdata\gp\daily\HCHO
+  NO2: D:\gisdata\gp\daily\NO2
+  O3: D:\gisdata\gp\daily\O3
+  PM25: D:\gisdata\gp\daily\PM25
+  CHOCHO: D:\gisdata\gp\weekly\CHOCHO
+  SO2: D:\gisdata\gp\weekly\SO2
 
 
