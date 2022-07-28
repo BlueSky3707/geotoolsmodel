@@ -36,3 +36,13 @@ shp:
    shppath: D:\gisdata  #D:\hbt_ratertopoint
    citypath: D:\gisdata\gp\city.shp #D:\project\city.shp
    code: GBK
+ratser:
+  CO: D:\hbt\daily\CO
+  HCHO: D:\hbt\daily\HCHO
+  NO2: D:\hbt\daily\NO2
+  O3: D:\hbt\daily\O3
+  PM25: D:\hbt\daily\PM25
+  CHOCHO: D:\hbt\weekly\CHOCHO
+  SO2: D:\hbt\weekly\SO2
+
+
