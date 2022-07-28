@@ -12,14 +12,15 @@
     <artifactId>gistools</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sxyjgistools</name>
+    <name>cachegistools</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <geotools.version>25-SNAPSHOT</geotools.version>
-        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version> 
+     <!--    <maven-war-plugin.version>3.2.3</maven-war-plugin.version> -->
     </properties>
 
     <repositories>
@@ -152,6 +153,27 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        
+        <resources>
+		    <resource>
+		        <directory>src/main/java</directory>
+		        <includes>
+		            <include>**/*.yml</include>
+		            <include>**/*.properties</include>
+		            <include>**/*.xml</include>
+		        </includes>
+		        <filtering>false</filtering>
+		    </resource>
+		    <resource>
+		        <directory>src/main/resources</directory>
+		        <includes>
+		            <include>**/*.yml</include>
+		            <include>**/*.properties</include>
+		            <include>**/*.xml</include>
+		        </includes>
+		        <filtering>false</filtering>
+		    </resource>
+		</resources>
     </build>
 
 </project>
