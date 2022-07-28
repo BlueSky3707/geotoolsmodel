@@ -78,19 +78,17 @@ public class ParseShpfileController {
     @ApiImplicitParams({
     	@ApiImplicitParam(paramType = "query", name = "starttime", required = false, dataType = "String", value = "开始时间，格式：20220701"),
     	@ApiImplicitParam(paramType = "query", name = "endtime", required = false, dataType = "String", value = "结束时间，格式：20220731"),
-    	@ApiImplicitParam(paramType = "query", name = "spatialRel", required = true, dataType = "String", allowableValues = "CO,NO2,HCHO,O3,PM25,SO2,CHOCHO", value = "空间位置关系"),
+    	@ApiImplicitParam(paramType = "query", name = "rastertype", required = true, dataType = "String", allowableValues = "CO,NO2,HCHO,O3,PM25,SO2,CHOCHO", value = "空间位置关系"),
     })
     public ApiResult getMaxRmaxToName(@RequestParam(value = "starttime", required = false) String starttime,
     		@RequestParam(value = "endtime", required = false) String endtime,
-    		
     		@RequestParam(value = "rastertype", required = true) String rastertype
-    		) throws IOException {
-    	
+    		) {
+    	double maxRmax = rasterMapper.getMaxRmax(starttime, endtime, rastertype);
+		String maxRmaxToName = rasterMapper.getMaxRmaxToName(starttime, endtime, rastertype, maxRmax);
     	ApiResult api = new ApiResult();
     	api.setCode(200);
-    	
-    	
-    	api.setData(null);
+    	api.setData(maxRmaxToName);
     	return api;
     }
     /*

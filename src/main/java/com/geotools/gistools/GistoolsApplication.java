@@ -11,7 +11,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableCaching
-@EnableScheduling 
+//@EnableScheduling 
 @MapperScan("com.geotools.gistools.dao")
 @SpringBootApplication(exclude = SolrAutoConfiguration.class)
 //@SpringBootApplication(exclude=DataSourceAutoConfiguration.class)

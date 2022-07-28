@@ -13,7 +13,7 @@
     <select id="getMaxRmax" parameterType="java.lang.String"  resultType="java.lang.Double">
        select MAX(rmax) from sx_raster where ratertime &gt; #{starttime} AND ratertime &lt; #{endtime} and rastertype=#{rastertype}
     </select>
-    <select id="getMaxRmaxToName" parameterType="java.lang.String"  resultType="java.lang.String>
+    <select id="getMaxRmaxToName"  resultType="java.lang.String">
        select rastername from sx_raster where ratertime &gt; #{starttime} AND ratertime &lt; #{endtime} and rastertype=#{rastertype}  AND rmax=#{max}
     </select>
 </mapper>
