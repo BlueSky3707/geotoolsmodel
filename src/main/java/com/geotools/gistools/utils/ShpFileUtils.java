@@ -1,5 +1,6 @@
 package com.geotools.gistools.utils;
 
+import org.gdal.gdal.Dataset;
 import org.geotools.data.*;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -19,6 +20,11 @@ import java.nio.charset.Charset;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import org.gdal.gdal.Band;
+import org.gdal.gdal.Dataset;
+import org.gdal.gdal.Driver;
+import org.gdal.gdal.gdal;
+import org.gdal.gdalconst.gdalconstConstants;
 
 /**
  * 功能描述：
