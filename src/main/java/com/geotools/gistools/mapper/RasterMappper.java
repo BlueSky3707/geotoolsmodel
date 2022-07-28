@@ -15,5 +15,6 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface RasterMappper {
     int insertRater(List<Object> pRaster);
+    double getMaxtime(String fieldMax);
 
 }
