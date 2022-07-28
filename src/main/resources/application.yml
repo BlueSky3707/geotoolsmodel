@@ -33,6 +33,6 @@ logging:
     com.geotools.gistools.mapper: DEBUG
     
 shp: 
-   shppath: D:\hbt_ratertopoint   #D:\gisdata
-   citypath: D:\project\city.shp          #D:\gisdata\gp\city.shp 
+   shppath: D:\gisdata  #D:\hbt_ratertopoint
+   citypath: D:\gisdata\gp\city.shp #D:\project\city.shp
    code: GBK
