@@ -180,7 +180,24 @@ public class SpatialDataQueryController {
         apiData.setData(pFeartrues);
         return apiData;
     }
-
+    @ApiOperation(value = "自定义sql查询")
+    @RequestMapping(value = "customQuery", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "sql", required = true, dataType = "String", value = "select * from layer")})
+    public ApiResult customQuery(@RequestParam(value = "sql", required = true) String sql){
+    	 ApiResult apiData = new ApiResult();
+    	 List<HashMap<String, Object>> execQuery = spatialDataQueryService.execQuery(sql);
+    	 apiData.setData(execQuery);
+         return apiData;
+    }
+    @ApiOperation(value = "自定义sql编辑")
+    @RequestMapping(value = "execEdit", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "sql", required = true, dataType = "String", value = "insert update delete")})
+    public ApiResult execEdit(@RequestParam(value = "sql", required = true) String sql){
+    	ApiResult apiData = new ApiResult();
+    	int execEdit = spatialDataQueryService.execEdit(sql);
+    	apiData.setData(execEdit);
+    	return apiData;
+    }
     /**
      * 批量新增
      *
@@ -323,7 +340,8 @@ public class SpatialDataQueryController {
     }
 
     //修改数据格式
-    List<HashMap<String, Object>> getData(HashMap<String, Object> obj, int state) {
+    
+	List<HashMap<String, Object>> getData(HashMap<String, Object> obj, int state) {
         List<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
         String tablename = obj.get("tablename").toString();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

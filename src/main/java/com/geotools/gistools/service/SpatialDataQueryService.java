@@ -43,4 +43,6 @@ public interface SpatialDataQueryService {
     List<HashMap<String, Object>> getWllogAndBi(String kssj,String jssj, Integer fid);
     Integer getWllogCount(Integer fid);
     Map<String, Object> getMax(Map<String, Object> obj);
+    List<HashMap<String, Object>> execQuery(String sql);
+    int execEdit(String sql);
 }

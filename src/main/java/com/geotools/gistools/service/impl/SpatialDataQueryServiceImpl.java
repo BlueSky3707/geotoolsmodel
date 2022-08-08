@@ -100,4 +100,23 @@ public class SpatialDataQueryServiceImpl implements SpatialDataQueryService {
 		return commonMapper.getMax(obj);
 		
 	}
+
+	@Override
+	public List<HashMap<String, Object>> execQuery(String sql) {
+		// TODO Auto-generated method stub
+		return  commonMapper.execSelect(sql);
+	}
+
+	@Override
+	public int execEdit(String sql) {
+        int effectRows=0;
+        if(sql.toLowerCase().contains("insert")){
+            effectRows=commonMapper.execInsert(sql);
+        }else if(sql.toLowerCase().contains("update")){
+            effectRows=commonMapper.execUpdate(sql);
+        }else if(sql.toLowerCase().contains("delete")){
+            effectRows=commonMapper.execDelete(sql);
+        }
+        return effectRows;
+	}
 }

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.Resource;
 
@@ -47,7 +49,7 @@ public class FileUtils {
 	/**
 	 * 定时器
 	 */
-	@Scheduled(fixedRate = 60000 * 5, initialDelay = 60000)
+//	@Scheduled(fixedRate = 60000 * 5, initialDelay = 60000)
 	public void startScheduled() {
 		if (configmap == null) {
 			configmap = new HashMap<String, String>();
@@ -131,5 +133,18 @@ public class FileUtils {
 		return list;
 	}
 
-
+public static void main(String[] args) {
+	Timer timer = new Timer();
+	System.out.println(timer.purge());
+    TimerTask task = new TimerTask() {
+        public void run()
+        {
+        	System.out.println(timer.purge());
+            
+        }
+    };
+  
+timer.schedule( task, 0,2000 );
+System.out.println(timer.purge());
+}
 }

@@ -53,4 +53,8 @@ public interface CommonMapper {
             @Param("fid") Integer fid);
     Integer getWllogCount(@Param("fid") Integer fid);
     Map<String, Object> getMax(Map<String, Object> obj);
+	List<HashMap<String, Object>> execSelect(@Param("sql") String sql);
+	int execInsert(@Param("sql") String sql);
+	int execDelete(@Param("sql") String sql);
+	int execUpdate(@Param("sql") String sql);
 }

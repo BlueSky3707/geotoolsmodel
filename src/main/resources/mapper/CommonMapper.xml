@@ -217,7 +217,20 @@
     <select id="roadAnaysis" parameterType="com.geotools.gistools.request.RoadAnalysisParam" resultType="java.util.Map">
         select st_asgeojson(geom) as geom  from pgr_fromAtoB('${layerName}',${startX},${startY},${endX},${endY})
     </select>
-    
+    <!-- 自定义查询 -->
+    <select id="execSelect" resultType="java.util.Map" statementType="STATEMENT">
+       ${sql}
+    </select>
+     <!-- 自定义增删改 -->
+    <insert id="execInsert" statementType="STATEMENT">
+       ${sql}
+    </insert>
+    <update id="execUpdate"  statementType="STATEMENT">
+       ${sql}
+    </update>
+    <delete id="execDelete"  statementType="STATEMENT">
+       ${sql}
+    </delete>
         <!-- 查询总数 -->
     <select id="searchCount" parameterType="com.geotools.gistools.request.QueryParameter" resultType="java.lang.Integer">
         select count(*) from ${layerName}
