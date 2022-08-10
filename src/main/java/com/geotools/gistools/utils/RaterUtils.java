@@ -2,13 +2,15 @@ package com.geotools.gistools.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.gdal.gdal.Band;
 import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconstConstants;
 import org.springframework.stereotype.Component;
-import com.geotools.gistools.mapper.RasterMappper;
+import com.geotools.gistools.mapper.RasterMapper;
 
 
 /**
@@ -20,7 +22,7 @@ import com.geotools.gistools.mapper.RasterMappper;
 @Component
 public class RaterUtils {
 	@Resource
-	RasterMappper rasterMapper;
+	RasterMapper rasterMapper;
 
 	/**
 	 * @param rasterPath

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.geotools.gistools.mapper.RasterMappper">
+<mapper namespace="com.geotools.gistools.mapper.RasterMapper">
 <insert id="insertRater" parameterType="java.util.HashMap">
     insert into sx_raster(rastertype,rastername,ratertime,rmax,rmin,mean,stddev) values
   

@@ -1,5 +1,6 @@
 package com.geotools.gistools.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +15,8 @@ import java.util.Map;
  * @Date: 2022/7/27 17:30
  */
 @Repository
-@org.apache.ibatis.annotations.Mapper
-public interface RasterMappper {
+@Mapper
+public interface RasterMapper {
 	int insertRater(Map<String, Object> obj);
 
 	String getMaxtime(@Param("fieldMax") String fieldMax, @Param("rastertype") String rastertype);

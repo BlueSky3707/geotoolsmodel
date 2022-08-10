@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.geotools.gistools.mapper.RasterMappper;
+import com.geotools.gistools.mapper.RasterMapper;
 
 /**
  * 功能描述：
@@ -26,7 +26,7 @@ import com.geotools.gistools.mapper.RasterMappper;
 @Component
 public class FileUtils {
 	@Resource
-	RasterMappper rasterMapper;
+	RasterMapper rasterMapper;
 	@Resource
 	RaterUtils raterUtils;
 	@Value("${ratser.CO}")

@@ -2,6 +2,8 @@ package com.geotools.gistools.mapper;
 
 import com.geotools.gistools.beans.TileBox;
 import com.geotools.gistools.request.TileParam;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Map;
  * @Date: 2021/5/27 11:01
  */
 @Repository
-@org.apache.ibatis.annotations.Mapper
+@Mapper
 public interface TileMapper {
     List<Map> getSimpleTile(TileBox tileBox);
 

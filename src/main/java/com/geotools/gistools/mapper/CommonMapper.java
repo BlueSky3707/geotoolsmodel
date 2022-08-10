@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.geotools.gistools.request.RoadAnalysisParam;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +22,7 @@ import com.geotools.gistools.request.QueryParameter;
  * @Date: 2021/5/20 15:10
  */
 @Repository
-@org.apache.ibatis.annotations.Mapper
+@Mapper
 public interface CommonMapper {
     List<Map<String, Object>> search(QueryParameter queryParameter);
     Integer searchCount(QueryParameter queryParameter);

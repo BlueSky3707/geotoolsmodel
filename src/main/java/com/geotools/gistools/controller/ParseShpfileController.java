@@ -1,6 +1,6 @@
 package com.geotools.gistools.controller;
 
-import com.geotools.gistools.mapper.RasterMappper;
+import com.geotools.gistools.mapper.RasterMapper;
 import com.geotools.gistools.request.ShpParam;
 import com.geotools.gistools.request.ShpQueryParam;
 import com.geotools.gistools.respose.ApiResult;
@@ -55,7 +55,7 @@ public class ParseShpfileController {
 	@Resource
 	FileUtils fileUtils;
 	@Resource
-	RasterMappper rasterMapper;
+	RasterMapper rasterMapper;
 	@Value("${shp.citypath}")
 	String citypath;
 	@Value("${shp.shppath}")

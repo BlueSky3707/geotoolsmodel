@@ -3,6 +3,7 @@ package com.geotools.gistools.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ import com.geotools.gistools.request.QueryParameter;
 
 
 @Repository
-@org.apache.ibatis.annotations.Mapper
+@Mapper
 public interface CityptDao {
     List<Map<String, Object>> selectList();
 
