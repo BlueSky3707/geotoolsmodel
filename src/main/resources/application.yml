@@ -45,4 +45,8 @@ ratser:
    CHOCHO: D:\gisdata\gp\weekly\CHOCHO
    SO2: D:\gisdata\gp\weekly\SO2
 
+clipshp:
+  filePath: D:\ProjectWorkSpace\hx_search\data\file\sx_citygh.shp
+  encode: UTF-8
+
 

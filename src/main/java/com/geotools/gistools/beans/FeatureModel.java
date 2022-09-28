@@ -1,4 +1,4 @@
-package com.geotools.gistools.utils;
+package com.geotools.gistools.beans;
 
 import lombok.Data;
 

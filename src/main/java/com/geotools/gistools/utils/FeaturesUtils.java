@@ -2,6 +2,7 @@ package com.geotools.gistools.utils;
 
 import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.io.WKTReader;
+import io.lettuce.core.dynamic.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.geotools.geometry.jts.JTSFactoryFinder;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.ScopeMetadata;
  * @Date: 2021/5/24 11:10
  */
 public class FeaturesUtils {
-    private static final Logger logger = LoggerFactory.getLogger(FeaturesUtils.class);
 
     public static Geometry chageGeoByValue(Geometry geo) {
         if (geo == null) return null;

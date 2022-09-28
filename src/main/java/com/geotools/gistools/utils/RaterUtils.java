@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.geotools.gistools.beans.FeatureModel;
 import org.gdal.gdal.Band;
 import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
